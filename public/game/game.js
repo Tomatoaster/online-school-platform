@@ -7,10 +7,9 @@ function drawLine(ctx, x1, y1, x2, y2) {
   ctx.stroke();
 }
 
-const canvas = document.getElementById('gameframe');
-canvas.width = 1536;
-canvas.height = 605;
-const canvasContext = canvas.getContext('2d');
+let canvas;
+let canvasContext;
+
 let timeout;
 let running = false;
 let answerTime = false;
@@ -116,13 +115,20 @@ function difficultyHandler(ind, button) {
   showImage();
 }
 
-const diffArray = document.getElementsByClassName('difficulty');
-for (let i = 0; i < diffArray.length; i++) {
-  diffArray[i].addEventListener('click', () => difficultyHandler(i, diffArray[i]));
-}
+window.onload = () => {
+  canvas = document.getElementById('gameframe');
+  canvas.width = 1536;
+  canvas.height = 605;
+  canvasContext = canvas.getContext('2d');
 
-canvas.addEventListener('click', clickTarget);
-canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-canvasContext.font = '70px Gill Sans';
-canvasContext.fillStyle = 'gold';
-canvasContext.fillText('Choose Difficulty!', 500, 300);
+  canvas.addEventListener('click', clickTarget);
+  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+  canvasContext.font = '70px Gill Sans';
+  canvasContext.fillStyle = 'gold';
+  canvasContext.fillText('Choose Difficulty!', 500, 300);
+
+  const diffArray = document.getElementsByClassName('difficulty');
+  for (let i = 0; i < diffArray.length; i++) {
+    diffArray[i].addEventListener('click', () => difficultyHandler(i, diffArray[i]));
+  }
+};
