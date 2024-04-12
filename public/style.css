@@ -151,11 +151,11 @@ table, th, td {
   padding: 3px;
 }
 
-td.left {
+td:first-child {
   text-align: left;
 }
 
-td.center {
+td:last-child {
   text-align: center;
 }
 
@@ -245,7 +245,24 @@ nav {
   margin: auto;
 }
 
-nav a {
+nav div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+nav div.middle {
+  margin-left: 10%;
+  width: 80%;
+}
+
+nav div.right {
+  justify-content: right;
+  width: 10%;
+}
+
+nav div a {
   
   display: flex;
   align-items: center;
@@ -257,7 +274,6 @@ nav a {
   color: #232323;
   font-weight: 600;
   height: 100%;
-  
 }
 
 nav a:hover {
