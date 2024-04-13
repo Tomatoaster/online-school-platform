@@ -127,7 +127,7 @@ window.onload = () => {
   canvasContext.fillStyle = 'gold';
   canvasContext.fillText('Choose Difficulty!', 500, 300);
 
-  const diffArray = document.getElementsByClassName('difficulty');
+  const diffArray = Array.from(document.getElementsByClassName('difficulty'));
   for (let i = 0; i < diffArray.length; i++) {
     diffArray[i].addEventListener('click', () => difficultyHandler(i, diffArray[i]));
   }
