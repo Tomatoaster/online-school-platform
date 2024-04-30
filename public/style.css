@@ -1,3 +1,88 @@
 body {
-  background-color: grey;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  background-color: #303040;
+  color: #dfdfff;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+header {
+  background-color: black;
+  font-size: 40pt;
+  text-align: center;
+}
+
+header a,
+header a:visited,
+header a:hover {
+  color: #dfdfff;
+  text-decoration: none;
+}
+
+aside {
+  display: grid;
+
+  padding-top: 40pt;
+  text-align: center;
+  position: absolute;
+  width: 10vw;
+  min-width: 6em;
+  background-color: black;
+  height: 100%;
+}
+
+aside a {
+  color: #dfdfff;
+  text-decoration: none;
+}
+
+form.hwUpload {
+  /* background-color: blue;
+  padding: 2vw;
+  border-radius: 10px; */
+  margin: auto;
+  flex-wrap: wrap;
+  display: flex;
+  width: 50vw;
+  align-items: center;
+  justify-content: center;
+}
+
+form.hwUpload textarea {
+  resize: none;
+  background-color: black;
+  color: #dfdfff;
+  width: 100%;
+  height: 12em;
+  margin-bottom: 20px;
+}
+
+form.hwUpload label {
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+form.hwUpload input {
+  background-color: black;
+  color: #dfdfff;
+  margin-bottom: 20px;
+}
+
+input#subjName {
+  width: 40em;
+}
+
+form.hwUpload div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form.hwUpload input[type='submit'] {
+  font-size: 14pt;
+  font-weight: 600;
 }

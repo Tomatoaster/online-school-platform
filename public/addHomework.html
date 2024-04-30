@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Online Napló</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html">Online Napló</a>
+    </header>
+
+
+    <h1>Feladat létrehozása</h1>
+    <form class="hwUpload" action="/addHomework" method="POST" enctype="multipart/form-data">
+        <div>
+            <label>Tantárgy ID:</label>
+            <input type="text" name="hwSubject" id="hwSubject" required>
+        </div>
+        <div>
+            <textarea name="hwDesc" id="hwDesc" placeholder="Feladat Leírása" required></textarea>
+        </div>
+        <div>
+            <label>Határidő:</label>
+            <input type="date" name="dueDate" id="dueDate" required>
+        </div>
+        <div>
+            <label>Specifikáció:</label>
+            <input type="file" accept="application/pdf" name="hwFile" id="hwFile">
+        </div>
+        <input type="submit" value="Feltölt!">
+    </form>
+
+</body>
+
+</html>

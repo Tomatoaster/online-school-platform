@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Online Napló</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html">Online Napló</a>
+    </header>
+
+
+    <h1>Tantárgy hozzáadása</h1>
+    <form class="hwUpload" action="/addSubject" method="POST">
+        <div>
+            <label>Tantárgy ID:</label>
+            <input type="text" name="subjectId" id="newSubject" required>
+        </div>
+        <div>
+            <label>Tantárgy neve:</label>
+            <input type="text" name="subjName" id="subjName" required>
+        </div>
+        <div>
+            <textarea name="subjDesc" id="subjDesc" placeholder="Tantárgy Leírása" required></textarea>
+        </div>
+        <input type="submit" value="Létrehoz!">
+    </form>
+
+</body>
+
+</html>

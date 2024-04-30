@@ -143,3 +143,6 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 public/Lab1/
+
+data/subjects.json
+data/docs/
