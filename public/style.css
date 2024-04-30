@@ -65,7 +65,8 @@ form.hwUpload label {
   margin-bottom: 20px;
 }
 
-form.hwUpload input {
+form.hwUpload input,
+form.hwUpload button {
   background-color: black;
   color: #dfdfff;
   margin-bottom: 20px;
@@ -82,7 +83,7 @@ form.hwUpload div {
   justify-content: center;
 }
 
-form.hwUpload input[type='submit'] {
+form.hwUpload button {
   font-size: 14pt;
   font-weight: 600;
 }

@@ -63,7 +63,7 @@ app.post('/addHomework', upload.single('hwFile'), (req, res) => {
     }
   }
   const idRegex = /..*/;
-  console.log(req.file.filename);
+  // console.log(req.file.filename);
   if (
     !found ||
     Number.isNaN(Date.parse(req.body.dueDate)) ||
@@ -74,7 +74,7 @@ app.post('/addHomework', upload.single('hwFile'), (req, res) => {
     return;
   }
 
-  console.log('OK');
+  // console.log('OK');
   const newPdf = {};
   newPdf.pdfFile = req.file.filename;
   newPdf.dueDate = req.body.dueDate;
