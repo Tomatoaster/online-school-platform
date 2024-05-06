@@ -37,7 +37,14 @@ app.post('/addSubject', (req, res) => {
     }
 
     req.body.pdfs = [];
-    subjects.push(req.body);
+    const newSubject = {};
+    newSubject.subjectId = req.body.subjectId;
+    newSubject.subjName = req.body.subjName;
+    newSubject.subjDesc = req.body.subjDesc;
+    newSubject.pdfs = [];
+    console.log(newSubject);
+
+    subjects.push(newSubject);
     fs.writeFile(subjFileName, JSON.stringify(subjects), (error) => {
       if (error) {
         throw error;
