@@ -107,18 +107,19 @@ app.post('/deleteSubject', (req, res) => {
     if (subjects[i].subjectId === req.body.delSubject) {
       ind = i;
     }
-    for (let j = 0; j < subjects[i].pdfs.length; j++) {
-      fs.rm(path.join(pdfDir, subjects[i].pdfs[j].pdfFile), (err) => {
-        if (err) {
-          console.log("Couldn't delete subject!");
-        }
-      });
-    }
   }
   if (ind === -1) {
     res.sendStatus(400);
     return;
   }
+  for (let j = 0; j < subjects[ind].pdfs.length; j++) {
+    fs.rm(path.join(pdfDir, subjects[ind].pdfs[j].pdfFile), (err) => {
+      if (err) {
+        console.log("Couldn't delete subject!");
+      }
+    });
+  }
+
   subjects.splice(ind, 1);
   fs.writeFile(subjFileName, JSON.stringify(subjects), (error) => {
     if (error) {
