@@ -27,8 +27,7 @@ const upload = multer({ storage: diskStorage });
 
 app.post('/addSubject', (req, res) => {
   // Mindegyik csak egy nem ures string
-  const idRegex = /..*/;
-  if (idRegex.test(req.body.subjectId) && idRegex.test(req.body.subjName) && idRegex.test(req.body.subjDesc)) {
+  if (req.body.subjectId && req.body.subjName && req.body.subjDesc) {
     const subjects = getSubjects();
     for (let i = 0; i < subjects.length; i++) {
       if (subjects[i].subjectId === req.body.subjectId) {
@@ -62,12 +61,11 @@ app.post('/addHomework', upload.single('hwFile'), (req, res) => {
       ind = i;
     }
   }
-  const idRegex = /..*/;
   // console.log(req.file.filename);
   if (
     !found ||
     Number.isNaN(Date.parse(req.body.dueDate)) ||
-    !idRegex.test(req.body.hwDesc) ||
+    !req.body.hwDesc ||
     req.file.mimetype !== 'application/pdf'
   ) {
     res.sendStatus(400);
