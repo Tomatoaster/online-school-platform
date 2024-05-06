@@ -85,10 +85,11 @@ app.post('/addHomework', upload.single('hwFile'), (req, res) => {
   }
 
   // console.log('OK');
-  const newPdf = {};
-  newPdf.pdfFile = req.file.filename;
-  newPdf.dueDate = req.body.dueDate;
-  newPdf.desc = req.body.hwDesc;
+  const newPdf = {
+    pdfFile: req.file.filename,
+    dueDate: req.body.dueDate,
+    desc: req.body.hwDesc,
+  };
   subjects[ind].pdfs.push(newPdf);
   fs.writeFile(subjFileName, JSON.stringify(subjects), (error) => {
     if (error) {
