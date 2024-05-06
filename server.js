@@ -18,12 +18,12 @@ app.use(express.static(staticDir));
 app.use(express.urlencoded({ extended: true }));
 
 const pdfDir = path.join(process.cwd(), 'data', 'docs');
-const memStorage = multer.diskStorage({
+const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, pdfDir);
   },
 });
-const upload = multer({ storage: memStorage });
+const upload = multer({ storage: diskStorage });
 
 app.post('/addSubject', (req, res) => {
   // Mindegyik csak egy nem ures string
@@ -71,6 +71,11 @@ app.post('/addHomework', upload.single('hwFile'), (req, res) => {
     req.file.mimetype !== 'application/pdf'
   ) {
     res.sendStatus(400);
+    fs.rm(path.join('data', 'docs', req.file.filename), (err) => {
+      if (err) {
+        console.log("Couldn't delete file!");
+      }
+    });
     return;
   }
 
