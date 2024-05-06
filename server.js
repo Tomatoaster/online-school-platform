@@ -37,11 +37,12 @@ app.post('/addSubject', (req, res) => {
     }
 
     req.body.pdfs = [];
-    const newSubject = {};
-    newSubject.subjectId = req.body.subjectId;
-    newSubject.subjName = req.body.subjName;
-    newSubject.subjDesc = req.body.subjDesc;
-    newSubject.pdfs = [];
+    const newSubject = {
+      subjectId: req.body.subjectId,
+      subjName: req.body.subjName,
+      subjDesc: req.body.subjDesc,
+      pdfs: [],
+    };
     console.log(newSubject);
 
     subjects.push(newSubject);
