@@ -62,3 +62,48 @@ nav p {
   text-wrap: wrap;
   width: 6em;
 }
+
+table {
+  width: 70%;
+  margin: auto;
+  border-collapse: collapse;
+}
+
+td,
+th {
+  max-width: 10vw;
+  padding: 5px;
+  word-wrap: break-word;
+}
+
+td:first-child,
+td:last-child {
+  text-align: center;
+}
+
+td:nth-child(2) {
+  text-align: center;
+  font-weight: bold;
+}
+
+table,
+tr,
+td,
+th {
+  background-color: #202030;
+  border: 2px solid #dfdfff;
+}
+
+td button,
+td button:hover,
+td button:visited,
+td button:active {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  color: #dfdfff;
+  text-decoration: none;
+}
+
+table {
+  margin-bottom: 40px;
+}

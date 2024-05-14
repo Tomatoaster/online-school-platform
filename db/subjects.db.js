@@ -1,17 +1,9 @@
 import mysql from 'mysql2/promise.js';
 
-/*
-Host: sql11.freesqldatabase.com
-Database name: sql11706392
-Database user: sql11706392
-Database password: S68HviUySF
-Port number: 3306
-*/
-
-export class RequestRepo {
+export class SubjectHandler {
   constructor() {
     this.pool = mysql.createPool({
-      connectionLimit: 10,
+      connectionLimit: 20,
       database: 'sql11706392',
       host: 'sql11.freesqldatabase.com',
       port: 3306,
@@ -51,35 +43,68 @@ export class RequestRepo {
     await this.pool.query(`INSERT INTO Users(UserName)
       VALUES ("Tanar1"), ("Tanar2"), ("Diak1"), ("Diak2"), ("Teljes Nev"), ("ltim2261")`);
 
-    await this.pool.query(`CREATE TABLE IF NOT EXISTS Requests (
-      ReqID INT PRIMARY KEY AUTO_INCREMENT,
-      Method VARCHAR(32),
-      URL VARCHAR(256),
-      Date DATE
-    )`);
-
     console.log('Tables created successfully!');
   }
 
-  findAllRequests() {
-    const query = 'SELECT * FROM Requests';
+  getAllSubjects() {
+    const query = 'SELECT * FROM Subjects';
     return this.pool.query(query);
   }
 
-  insertRequest(req) {
-    const date = new Date();
-    const query = 'INSERT INTO Requests VALUES (?, ?, ?)';
-    return this.pool.query(query, [req.method, req.url, date]);
+  insertSubject(subject) {
+    const query = 'INSERT INTO Subjects VALUES (?, ?, ?, ?)';
+    return this.pool.query(query, [subject.subjID, subject.subjName, subject.subjDesc, subject.userID]);
   }
 
-  async deleteAllRequests() {
-    const query = 'DELETE FROM Requests';
-    const [result] = await this.pool.query(query);
-    return result.affectedRows > 0;
+  getAllUsers() {
+    const query = 'SELECT * FROM Users';
+    return this.pool.query(query);
+  }
+
+  getUserByName(name) {
+    const query = `SELECT UserID
+      FROM Users
+      WHERE UserName LIKE ?
+      LIMIT 1`;
+    return this.pool.query(query, name);
+  }
+
+  getUserNameByID(id) {
+    const query = `SELECT UserName
+    FROM Users
+    WHERE UserID = ?`;
+    return this.pool.query(query, id);
+  }
+
+  async deleteSubject(id) {
+    await this.pool.query(
+      `DELETE FROM Assignments
+      WHERE SubjID = ?`,
+      id,
+    );
+
+    await this.pool.query(
+      `DELETE FROM Subjects
+      WHERE SubjID = ?`,
+      id,
+    );
+  }
+
+  getSubjectAssignments(id) {
+    const query = `SELECT *
+    FROM Assignments
+    WHERE SubjID = ?`;
+    return this.pool.query(query, id);
+  }
+
+  insertAssignment(assignment) {
+    const query = `INSERT INTO Assignments(SubjID, ADesc, DueDate, FileName)
+    VALUES (?, ?, ?, ?)`;
+    return this.pool.query(query, [assignment.subjID, assignment.hwDesc, assignment.dueDate, assignment.fileName]);
   }
 }
 
-const db = new RequestRepo();
+const db = new SubjectHandler();
 try {
   await db.setupTables();
 } catch (err) {

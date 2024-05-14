@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<%- include('partials/head.ejs', { title: 'Tantárgy hozzáadása' }) %>
+
+    <body>
+        <header>
+            <a href="index.html">Online Napló</a>
+        </header>
+
+        <form class="form" action="/addSubject" method="POST">
+            <p class="title">Tantárgy hozzáadása</p>
+
+            <div class="input-container ic1">
+                <input type="text" class="input" name="subjectId" id="newSubject" placeholder=" " required>
+                <div class="cut"></div>
+                <label for="subjectId" class="placeholder">Tantárgy ID</label>
+            </div>
+
+            <div class="input-container ic2">
+                <input type="text" class="input" name="subjName" id="subjName" placeholder=" " required>
+                <div class="cut"></div>
+                <label for="subjName" class="placeholder">Tantárgy neve</label>
+            </div>
+
+            <div class="textarea ic2">
+                <textarea name="subjDesc" class="input input-area" id="subjDesc" placeholder=" " required></textarea>
+                <div class="cut"></div>
+                <label for="subjDesc" class="placeholder">Tantárgy leírása</label>
+            </div>
+
+            <div class="input-container ic2">
+                <input list="users" class="input" name="userName" placeholder=" ">
+                <% if (users.length) { %>
+                    <datalist id="users">
+                        <% users.forEach((user)=> { %>
+                            <option value=<%=user.UserName %>></option>
+                            <% }) %>
+                    </datalist>
+                    <% } %>
+                        <div class="cut"></div>
+                        <label for="userName" class="placeholder">Felelős</label>
+            </div>
+            <button name="submitButton" class="submit" type="submit">Létrehoz!</button>
+        </form>
+
+
+    </body>
+
+</html>

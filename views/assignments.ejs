@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<%- include('partials/head.ejs', { title: 'Online Napló' }) %>
+
+    <body>
+        <header>
+            <a href="index.html">Online Napló</a>
+            <nav>
+                <a href="addSubject.html">
+                    <p>Tantárgy hozzáadása</p>
+                </a>
+            </nav>
+        </header>
+
+        <% if (assignments.length) { %>
+            <h1>Feladatok</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feladat ID</th>
+                        <th>Tantárgy ID</th>
+                        <th>Feladat Leírása</th>
+                        <th>Filenév</th>
+                        <th>Határidő</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% assignments.forEach((assignment)=> { %>
+
+                        <tr>
+                            <td>
+                                <%= assignment.AID %>
+                            </td>
+                            <td>
+                                <%= assignment.SubjID %>
+                            </td>
+                            <td>
+                                <%= assignment.ADesc %>
+                            </td>
+                            <td>
+                                <%= assignment.FileName %>
+                            </td>
+                            <td>
+                                <%= assignment.DueDate %>
+                            </td>
+                            <td>
+                                <form action="/deleteSubject" method="POST">
+                                    <button name="delButton" type="submit">
+                                        <a>Töröl!</a>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <% }) %>
+
+                </tbody>
+            </table>
+            <% } else { %>
+                <h1>Nincs megjelenítendő feladat!</h1>
+                <% } %>
+
+                    <form class="form" action="/addHomework" method="POST" enctype="multipart/form-data">
+                        <p class="title">Feladat létrehozása</p>
+                        <!-- <div class="input-container ic1">
+                            <input type="text" class="input" name="hwSubject" id="hwSubject" placeholder=" " required>
+                            <div class="cut"></div>
+                            <label for="hwSubject" class="placeholder">Tantárgy ID</label>
+                        </div> -->
+                        <input type="hidden" name="hwSubject" value="<%= activeID %>">
+                        <div class="textarea ic2">
+                            <textarea name="hwDesc" id="hwDesc" class="input input-area" placeholder=" "
+                                required></textarea>
+                            <div class="cut"></div>
+                            <label for="hwDesc" class="placeholder">Feladat leírása</label>
+                        </div>
+                        <p class="subtitle">Határidő:</p>
+                        <div class="input-container">
+                            <input type="date" class="input" name="dueDate" id="dueDate" required>
+                        </div>
+                        <p class="subtitle">Specifikáció:</p>
+                        <div class="input-container">
+                            <input type="file" class="input" accept="application/pdf" name="hwFile" id="hwFile">
+                        </div>
+                        <button name="submitButton" class="submit" type="submit">Feltölt!</button>
+                    </form>
+
+
+    </body>
+
+</html>
