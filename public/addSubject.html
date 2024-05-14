@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Online Napló</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="form.css">
 </head>
 
 <body>
@@ -12,22 +13,29 @@
         <a href="index.html">Online Napló</a>
     </header>
 
+    <form class="form" action="/addSubject" method="POST">
+        <p class="title">Tantárgy hozzáadása</p>
 
-    <h1>Tantárgy hozzáadása</h1>
-    <form class="hwUpload" action="/addSubject" method="POST">
-        <div>
-            <label>Tantárgy ID:</label>
-            <input type="text" name="subjectId" id="newSubject" required>
+        <div class="input-container ic1">
+            <input type="text" class="input" name="subjectId" id="newSubject" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="subjectId" class="placeholder">Tantárgy ID</label>
         </div>
-        <div>
-            <label>Tantárgy neve:</label>
-            <input type="text" name="subjName" id="subjName" required>
+
+        <div class="input-container ic2">
+            <input type="text" class="input" name="subjName" id="subjName" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="subjName" class="placeholder">Tantárgy neve</label>
         </div>
-        <div>
-            <textarea name="subjDesc" id="subjDesc" placeholder="Tantárgy Leírása" required></textarea>
+
+        <div class="textarea ic2">
+            <textarea name="subjDesc" class="input input-area" id="subjDesc" placeholder=" " required></textarea>
+            <div class="cut"></div>
+            <label for="subjDesc" class="placeholder">Tantárgy leírása</label>
         </div>
-        <button name="submitButton" type="submit">Létrehoz!</button>
+        <button name="submitButton" class="submit" type="submit">Létrehoz!</button>
     </form>
+
 
 </body>
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Online Napló</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="form.css">
 </head>
 
 <body>
@@ -13,24 +14,27 @@
     </header>
 
 
-    <h1>Feladat létrehozása</h1>
-    <form class="hwUpload" action="/addHomework" method="POST" enctype="multipart/form-data">
-        <div>
-            <label>Tantárgy ID:</label>
-            <input type="text" name="hwSubject" id="hwSubject" required>
+    <form class="form" action="/addHomework" method="POST" enctype="multipart/form-data">
+        <p class="title">Feladat létrehozása</p>
+        <div class="input-container ic1">
+            <input type="text" class="input" name="hwSubject" id="hwSubject" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="hwSubject" class="placeholder">Tantárgy ID</label>
         </div>
-        <div>
-            <textarea name="hwDesc" id="hwDesc" placeholder="Feladat Leírása" required></textarea>
+        <div class="textarea ic2">
+            <textarea name="hwDesc" id="hwDesc" class="input input-area" placeholder=" " required></textarea>
+            <div class="cut"></div>
+            <label for="hwDesc" class="placeholder">Feladat leírása</label>
         </div>
-        <div>
-            <label>Határidő:</label>
-            <input type="date" name="dueDate" id="dueDate" required>
+        <p class="subtitle">Határidő:</p>
+        <div class="input-container">
+            <input type="date" class="input" name="dueDate" id="dueDate" required>
         </div>
-        <div>
-            <label>Specifikáció:</label>
-            <input type="file" accept="application/pdf" name="hwFile" id="hwFile">
+        <p class="subtitle">Specifikáció:</p>
+        <div class="input-container">
+            <input type="file" class="input" accept="application/pdf" name="hwFile" id="hwFile">
         </div>
-        <button name="submitButton" type="submit">Feltölt!</button>
+        <button name="submitButton" class="submit" type="submit">Feltölt!</button>
     </form>
 
 </body>

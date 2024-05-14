@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Online Napló</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="form.css">
 </head>
 
 <body>
@@ -12,14 +13,14 @@
         <a href="index.html">Online Napló</a>
     </header>
 
-
-    <h1>Tantárgy törlése:</h1>
-    <form class="hwUpload" action="/deleteSubject" method="POST">
-        <div>
-            <label>Tantárgy ID:</label>
-            <input type="text" name="delSubject" id="delSubject">
-            <button name="submitButton" type="submit">Törlés!</button>
+    <form class="form" action="/deleteSubject" method="POST">
+        <p class="title">Tantárgy törlése</p>
+        <div class="input-container ic1">
+            <input type="text" class="input" name="delSubject" id="delSubject" placeholder=" ">
+            <div class="cut"></div>
+            <label for="delSubject" class="placeholder">Tantárgy ID:</label>
         </div>
+        <button name="submitButton" class="submit" type="submit">Törlés!</button>
 
     </form>
 

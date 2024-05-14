@@ -14,9 +14,6 @@ function getSubjects() {
 }
 
 const app = express();
-app.use(express.static(staticDir));
-app.use(express.urlencoded({ extended: true }));
-
 const pdfDir = path.join(process.cwd(), 'data', 'docs');
 const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,6 +21,9 @@ const diskStorage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: diskStorage });
+
+app.use(express.static(staticDir));
+app.use(express.urlencoded({ extended: true }));
 
 app.post('/addSubject', (req, res) => {
   // Mindegyik csak egy nem ures string
