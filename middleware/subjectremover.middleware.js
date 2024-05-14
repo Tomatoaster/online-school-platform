@@ -13,6 +13,6 @@ export default async function subjectRemover(req, res) {
     }
     return;
   }
-
-  res.render('error', { message: 'Subject not found!' });
+  const [subjects] = await db.getAllSubjects();
+  res.render('subjects', { subjects, errorMsg: 'Subject not found!' });
 }

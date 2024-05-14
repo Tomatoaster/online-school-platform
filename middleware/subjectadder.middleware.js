@@ -26,6 +26,6 @@ export default async function subjectAdder(req, res) {
     res.render('subjects', { subjects, errorMsg: '' });
     return;
   }
-
-  res.render('error', { message: 'Bad request!' });
+  const [subjects] = await db.getAllSubjects();
+  res.render('subjects', { subjects, errorMsg: 'Bad request!' });
 }
