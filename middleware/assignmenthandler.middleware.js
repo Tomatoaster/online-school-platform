@@ -9,7 +9,7 @@ export default async function displayAssignments(req, res) {
 
   try {
     const [assignments] = await db.getSubjectAssignments(id);
-    res.render('assignments', { assignments, activeID: id });
+    res.render('assignments', { assignments, activeID: id, errorMsg: '' });
   } catch (err) {
     res.render('error', { message: err.message });
   }

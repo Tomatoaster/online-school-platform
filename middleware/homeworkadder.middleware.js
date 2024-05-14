@@ -9,10 +9,13 @@ export default async function homeworkAdder(req, res) {
   }
 
   if (req.file.mimetype !== 'application/pdf') {
-    res.render('error', { message: 'Invalid file upload!' });
+    const [assignments] = await db.getSubjectAssignments(req.body.hwSubject);
+    res.render('assignments', { assignments, activeID: req.body.hwSubject, errorMsg: 'Invalid file upload!' });
     console.log(process.cwd());
     fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (err) => {
-      console.log(`Could not delete file: ${err.message}`);
+      if (err) {
+        console.log(`Could not delete file: ${err}`);
+      }
     });
     return;
   }
@@ -30,13 +33,15 @@ export default async function homeworkAdder(req, res) {
     } catch (err) {
       res.render('error', { message: `Insertion unsuccessful: ${err.message}` });
       fs.rm(path.join(process.cwd(), 'data', 'docs', assignment.fileName), (rmerr) => {
-        console.log(`Could not delete file: ${rmerr.message}`);
+        if (rmerr) {
+          console.log(`Could not delete file: ${rmerr}`);
+        }
       });
       return;
     }
 
     const [assignments] = await db.getSubjectAssignments(assignment.subjID);
-    res.render('assignments', { assignments, activeID: assignment.subjID });
+    res.render('assignments', { assignments, activeID: assignment.subjID, errorMsg: '' });
     return;
   }
 

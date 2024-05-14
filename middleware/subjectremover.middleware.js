@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import db from '../db/subjects.db.js';
 
 export default async function subjectRemover(req, res) {
@@ -5,6 +7,15 @@ export default async function subjectRemover(req, res) {
   // console.log(id);
   if (id) {
     try {
+      const [subjAssignments] = await db.getSubjectAssignments(id);
+      subjAssignments.forEach((assignment) => {
+        fs.rm(path.join(process.cwd(), 'data', 'docs', assignment.FileName), (err) => {
+          if (err) {
+            console.log(`Could not delete file ${assignment.FileName}!`);
+          }
+        });
+      });
+
       await db.deleteSubject(id);
       const [subjects] = await db.getAllSubjects();
       res.render('subjects', { subjects, errorMsg: '' });

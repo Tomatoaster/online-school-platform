@@ -107,3 +107,9 @@ td button:active {
 table {
   margin-bottom: 40px;
 }
+
+p.errormsg {
+  width: 100%;
+  text-align: center;
+  color: red;
+}

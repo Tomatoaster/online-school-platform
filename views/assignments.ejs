@@ -85,7 +85,12 @@
                         </div>
                         <button name="submitButton" class="submit" type="submit">Feltölt!</button>
                     </form>
-
+                    <!-- Ha hiba van, ugyanide üzenettel -->
+                    <% if (errorMsg) {%>
+                        <p class="errormsg">
+                            <%= errorMsg %>
+                        </p>
+                        <% } %>
 
     </body>
 
