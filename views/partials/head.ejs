@@ -5,4 +5,9 @@
     </title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="form.css">
+    <% if (scripts.length) { %>
+        <% scripts.forEach((script)=> { %>
+            <script src="<%= script %>"></script>
+            <% }) %>
+                <% } %>
 </head>

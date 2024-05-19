@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
 
-<%- include('partials/head.ejs', { title: 'Online Napló' }) %>
+<%- include('partials/head.ejs', { title: 'Online Napló' , scripts: [ 'showSubjects.js' ] }) %>
 
     <body>
         <header>
@@ -18,9 +18,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Tantárgy ID</th>
+                        <th id="headerID">Tantárgy ID</th>
                         <th>Tantárgy Név</th>
-                        <th>Leírás</th>
+                        <!-- <th>Leírás</th> -->
                         <th>Felelős</th>
                         <th>Feladatok</th>
                         <th>Törlés</th>
@@ -30,15 +30,15 @@
                     <% subjects.forEach((subject)=> { %>
 
                         <tr>
-                            <td>
+                            <td class="idColumn">
                                 <%= subject.SubjID %>
                             </td>
                             <td>
                                 <%= subject.SubjName %>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <%= subject.SubjDesc %>
-                            </td>
+                            </td> -->
                             <td>
                                 <%= subject.UserID %>
                             </td>

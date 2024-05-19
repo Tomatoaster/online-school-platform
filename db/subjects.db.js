@@ -102,6 +102,13 @@ export class SubjectHandler {
     VALUES (?, ?, ?, ?)`;
     return this.pool.query(query, [assignment.subjID, assignment.hwDesc, assignment.dueDate, assignment.fileName]);
   }
+
+  getSubjectDescription(subjID) {
+    const query = `SELECT SubjDesc
+    FROM Subjects
+    WHERE SubjID = ?`;
+    return this.pool.query(query, subjID);
+  }
 }
 
 const db = new SubjectHandler();

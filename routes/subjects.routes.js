@@ -37,6 +37,16 @@ router.get(['/addSubject', '/addSubject.html'], async (req, res) => {
   }
 });
 
+router.get('/showDescription', async (req, res) => {
+  try {
+    const [desc] = await db.getSubjectDescription(req.query.id);
+    res.json(desc[0].SubjDesc);
+    // console.log(desc[0].SubjDesc);
+  } catch (err) {
+    res.json("Couldn't retrieve description!");
+  }
+});
+
 router.get('/showAssignments', displayAssignments);
 
 router.post('/addSubject', subjectAdder);

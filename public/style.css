@@ -113,3 +113,11 @@ p.errormsg {
   text-align: center;
   color: red;
 }
+
+td.descRow {
+  background-image: linear-gradient(#202030, #303040);
+  font-weight: normal;
+  text-decoration: none;
+  font-style: italic;
+  border-top: 0;
+}
