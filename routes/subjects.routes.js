@@ -2,10 +2,9 @@ import path from 'path';
 import express from 'express';
 import multer from 'multer';
 import db from '../db/subjects.db.js';
-import subjectAdder from '../middleware/subjectadder.middleware.js';
-import subjectRemover from '../middleware/subjectremover.middleware.js';
-import displayAssignments from '../middleware/assignmenthandler.middleware.js';
-import homeworkAdder from '../middleware/homeworkadder.middleware.js';
+import { subjectAdder, subjectRemover } from '../controller/subject.controller.js';
+import displayAssignments from '../controller/assignment.controller.js';
+import homeworkAdder from '../controller/homework.controller.js';
 import handleNotFound from '../middleware/error.middleware.js';
 
 const router = express.Router();
