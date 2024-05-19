@@ -3,11 +3,9 @@ import path from 'path';
 import db from '../db/subjects.db.js';
 
 export default async function subjectRemover(req, res) {
-  const id = new URLSearchParams(req.url.split('?')[1]).get('id');
-  // console.log(id);
-  if (id) {
+  if (req.query.id) {
     try {
-      const [subjAssignments] = await db.getSubjectAssignments(id);
+      const [subjAssignments] = await db.getSubjectAssignments(req.query.id);
       subjAssignments.forEach((assignment) => {
         fs.rm(path.join(process.cwd(), 'data', 'docs', assignment.FileName), (err) => {
           if (err) {
@@ -16,7 +14,7 @@ export default async function subjectRemover(req, res) {
         });
       });
 
-      await db.deleteSubject(id);
+      await db.deleteSubject(req.query.id);
       const [subjects] = await db.getAllSubjects();
       res.render('subjects', { subjects, errorMsg: '' });
     } catch (err) {
