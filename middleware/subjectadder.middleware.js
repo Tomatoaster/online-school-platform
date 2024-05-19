@@ -9,10 +9,10 @@ export default async function subjectAdder(req, res) {
         subjDesc: req.body.subjDesc,
         userID: await db.getUserByName(req.body.userName),
       };
-      // Nem csak az ID-t térítette vissza, hanem az oszlopot is, mint objektum
+
       if (!subject.userID[0][0]) {
-        res.render('error', { message: `Insertion unsuccessful: ${req.body.userName} not found!` });
-        return;
+        const raisedErr = { message: 'User not found!' };
+        throw raisedErr;
       }
       subject.userID = subject.userID[0][0].UserID;
       await db.insertSubject(subject);
