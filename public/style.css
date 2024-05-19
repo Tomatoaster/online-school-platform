@@ -121,3 +121,20 @@ td.descRow {
   font-style: italic;
   border-top: 0;
 }
+
+.ansMsg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  margin: auto;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  word-wrap: break-word;
+  text-align: center;
+  font-weight: bold;
+  height: 5%;
+  font-size: 24pt;
+  color: coral;
+  margin-bottom: 40px;
+}

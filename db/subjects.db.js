@@ -13,9 +13,9 @@ export class SubjectHandler {
   }
 
   async setupTables() {
-    // await this.pool.query('DROP TABLE IF EXISTS Assignments');
-    // await this.pool.query('DROP TABLE IF EXISTS Subjects');
-    // await this.pool.query('DROP TABLE IF EXISTS Users');
+    await this.pool.query('DROP TABLE IF EXISTS Assignments');
+    await this.pool.query('DROP TABLE IF EXISTS Subjects');
+    await this.pool.query('DROP TABLE IF EXISTS Users');
 
     await this.pool.query(`CREATE TABLE IF NOT EXISTS Users (
       UserID INT PRIMARY KEY AUTO_INCREMENT,
@@ -40,8 +40,8 @@ export class SubjectHandler {
       FOREIGN KEY (SubjID) REFERENCES Subjects(SubjID)
     )`);
 
-    // await this.pool.query(`INSERT INTO Users(UserName)
-    //   VALUES ("Tanar1"), ("Tanar2"), ("Diak1"), ("Diak2"), ("Teljes Nev"), ("ltim2261")`);
+    await this.pool.query(`INSERT INTO Users(UserName)
+      VALUES ("Tanar1"), ("Tanar2"), ("Diak1"), ("Diak2"), ("Teljes Nev"), ("ltim2261")`);
 
     console.log('Tables created successfully!');
   }
@@ -108,6 +108,19 @@ export class SubjectHandler {
     FROM Subjects
     WHERE SubjID = ?`;
     return this.pool.query(query, subjID);
+  }
+
+  getAssignmentFile(id) {
+    const query = `SELECT FileName
+    FROM Assignments
+    WHERE AID = ?`;
+    return this.pool.query(query, id);
+  }
+
+  deleteAssignment(id) {
+    const query = `DELETE FROM Assignments
+    WHERE AID = ?`;
+    return this.pool.query(query, id);
   }
 }
 

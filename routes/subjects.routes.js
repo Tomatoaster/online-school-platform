@@ -3,7 +3,7 @@ import express from 'express';
 import multer from 'multer';
 import db from '../db/subjects.db.js';
 import { subjectAdder, subjectRemover } from '../controller/subject.controller.js';
-import displayAssignments from '../controller/assignment.controller.js';
+import { displayAssignments, removeAssignment } from '../controller/assignment.controller.js';
 import homeworkAdder from '../controller/homework.controller.js';
 import handleNotFound from '../middleware/error.middleware.js';
 
@@ -52,6 +52,7 @@ router.get('/showAssignments', displayAssignments);
 router.post('/addSubject', subjectAdder);
 router.post('/deleteSubject', subjectRemover);
 router.post('/addHomework', upload.single('hwFile'), homeworkAdder);
+router.post('/removeAssignment', removeAssignment);
 
 router.use(handleNotFound);
 export default router;

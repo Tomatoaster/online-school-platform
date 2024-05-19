@@ -11,7 +11,6 @@ export default async function homeworkAdder(req, res) {
   if (req.file.mimetype !== 'application/pdf') {
     const [assignments] = await db.getSubjectAssignments(req.body.hwSubject);
     res.render('assignments', { assignments, activeID: req.body.hwSubject, errorMsg: 'Invalid file upload!' });
-    console.log(process.cwd());
     fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (err) => {
       if (err) {
         console.log(`Could not delete file: ${err}`);

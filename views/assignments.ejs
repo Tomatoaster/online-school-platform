@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
 
-<%- include('partials/head.ejs', { title: 'Online Napló' , scripts: {} }) %>
+<%- include('partials/head.ejs', { title: 'Online Napló' , scripts: [ 'delAssignment.js' ] }) %>
 
     <body>
         <header>
@@ -23,6 +23,7 @@
                         <th>Feladat Leírása</th>
                         <th>Filenév</th>
                         <th>Határidő</th>
+                        <th>Törlés</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +44,9 @@
                             </td>
                             <td>
                                 <%= assignment.DueDate %>
+                            </td>
+                            <td class="delAssignment">
+                                Törlés!
                             </td>
                         </tr>
 
