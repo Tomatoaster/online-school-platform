@@ -1,14 +1,15 @@
 import mysql from 'mysql2/promise.js';
 
 export class SubjectHandler {
+  // Setup: createDb.sql
   constructor() {
     this.pool = mysql.createPool({
       connectionLimit: 20,
-      database: 'sql11706392',
-      host: 'sql11.freesqldatabase.com',
+      database: 'WebProg_ltim2261',
+      host: 'localhost',
       port: 3306,
-      user: 'sql11706392',
-      password: 'S68HviUySF',
+      user: 'webprog2024',
+      password: 'zxcvb',
     });
   }
 

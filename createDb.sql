@@ -1,0 +1,5 @@
+CREATE DATABASE WebProg_ltim2261;
+
+USE WebProg_ltim2261;
+CREATE USER IF NOT EXISTS 'webprog2024'@'%' IDENTIFIED BY 'zxcvb';
+GRANT ALL PRIVILEGES ON WebProg_ltim2261.* TO 'webprog2024'@'%';
