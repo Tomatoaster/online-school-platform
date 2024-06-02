@@ -2,11 +2,12 @@
 
 <html>
 <%- include('partials/head.ejs', { title: 'Hiba!' , scripts: {} }) %>
+    <%- include('partials/header.ejs', {username, role}) %>
 
-    <body>
-        <p>
-            <%= message %>
-        </p>
-    </body>
+        <body>
+            <p class="ansMsg">
+                <%= message %>
+            </p>
+        </body>
 
 </html>

@@ -1,4 +1,12 @@
 import mysql from 'mysql2/promise.js';
+import crypto from 'crypto';
+
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16);
+  const hash = crypto.createHash('sha512').update(password).update(salt).digest();
+  const hashWithSalt = `${salt.toString('base64')}:${hash.toString('base64')}`;
+  return hashWithSalt;
+}
 
 export class SubjectHandler {
   // Setup: createDb.sql
@@ -20,16 +28,18 @@ export class SubjectHandler {
 
     await this.pool.query(`CREATE TABLE IF NOT EXISTS Users (
       UserID INT PRIMARY KEY AUTO_INCREMENT,
-      UserName VARCHAR(64)
+      UserName VARCHAR(64) UNIQUE,
+      Role VARCHAR(32) DEFAULT "student",
+      Password VARCHAR(512)
     );`);
 
     await this.pool.query(`CREATE TABLE IF NOT EXISTS Subjects (
       SubjID VARCHAR(64),
       SubjName VARCHAR(256),
       SubjDesc VARCHAR(256),
-      UserID INT,
+      UserID VARCHAR(64),
       PRIMARY KEY (SubjID),
-      FOREIGN KEY (UserID) REFERENCES Users(UserID)
+      FOREIGN KEY (UserID) REFERENCES Users(UserName)
     );`);
 
     await this.pool.query(`CREATE TABLE IF NOT EXISTS Assignments (
@@ -41,8 +51,24 @@ export class SubjectHandler {
       FOREIGN KEY (SubjID) REFERENCES Subjects(SubjID)
     )`);
 
-    await this.pool.query(`INSERT INTO Users(UserName)
-      VALUES ("Tanar1"), ("Tanar2"), ("Diak1"), ("Diak2"), ("Teljes Nev"), ("ltim2261")`);
+    await this.pool.query(
+      `INSERT INTO Users(UserName, Role, Password)
+      VALUES
+        ("Tanar1", "teacher", ?),
+        ("Tanar2", "teacher", ?),
+        ("Diak1", "student", ?),
+        ("Diak2", "student", ?),
+        ("Teljes Nev", "student", ?),
+        ("ltim2261", "admin", ?)`,
+      [
+        hashPassword('tanar1jelszo'),
+        hashPassword('tanar2jelszo'),
+        hashPassword('diak1jelszo'),
+        hashPassword('diak2jelszo'),
+        hashPassword('teljesnevjelszo'),
+        hashPassword('adminjelszo'),
+      ],
+    );
 
     console.log('Tables created successfully!');
   }
@@ -70,6 +96,14 @@ export class SubjectHandler {
     return this.pool.query(query, name);
   }
 
+  getUserDetails(name) {
+    const query = `SELECT UserName, Password, Role
+      FROM Users
+      WHERE UserName LIKE ?
+      LIMIT 1`;
+    return this.pool.query(query, name);
+  }
+
   getUserNameByID(id) {
     const query = `SELECT UserName
     FROM Users
@@ -89,6 +123,13 @@ export class SubjectHandler {
       WHERE SubjID = ?`,
       id,
     );
+  }
+
+  getSubjectOwner(id) {
+    const query = `SELECT UserID
+    FROM Subjects
+    WHERE SubjID = ?`;
+    return this.pool.query(query, id);
   }
 
   getSubjectAssignments(id) {
@@ -113,6 +154,13 @@ export class SubjectHandler {
 
   getAssignmentFile(id) {
     const query = `SELECT FileName
+    FROM Assignments
+    WHERE AID = ?`;
+    return this.pool.query(query, id);
+  }
+
+  getAssignmentSubject(id) {
+    const query = `SELECT SubjID
     FROM Assignments
     WHERE AID = ?`;
     return this.pool.query(query, id);

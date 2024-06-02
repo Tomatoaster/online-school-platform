@@ -1,4 +1,8 @@
 // 404
 export default function handleNotFound(req, res) {
-  res.status(404).render('error', { message: 'The requested endpoint is not found' });
+  res.status(404).render('error', {
+    message: 'The requested endpoint is not found',
+    username: req.session.username,
+    role: req.session.role,
+  });
 }

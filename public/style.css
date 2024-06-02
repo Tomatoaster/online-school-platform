@@ -10,10 +10,27 @@ h1 {
 }
 
 header {
+  width: 100%;
   background-color: black;
   font-size: 40pt;
   text-align: center;
   margin-bottom: 2%;
+}
+
+header > a.titleAnchor,
+header > a.titleAnchor:visited,
+header > a.titleAnchor:hover {
+  color: #dfdfff;
+  text-decoration: none;
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+div.profile img {
+  height: 1em;
+  margin-right: 5px;
 }
 
 header > a,
@@ -23,13 +40,36 @@ header > a:hover {
   text-decoration: none;
 }
 
+header div.profile {
+  display: inline-flex;
+  float: right;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 15px;
+
+  padding: 0 15px 0 15px;
+  height: 2em;
+  font-size: 16pt;
+  /* background-color: red; */
+}
+
+header div.profile:hover {
+  background-color: #303040;
+}
+
+header div.profileButton {
+  background-color: #303040;
+}
+
 nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 
-  margin-top: 10px;
+  /* margin-top: 10px; */
   height: 40px;
   background-color: #dfdfff;
   text-align: center;
@@ -76,14 +116,8 @@ th {
   word-wrap: break-word;
 }
 
-td:first-child,
-td:last-child {
+td {
   text-align: center;
-}
-
-td:nth-child(2) {
-  text-align: center;
-  font-weight: bold;
 }
 
 table,
@@ -106,6 +140,10 @@ td button:active {
 
 table {
   margin-bottom: 40px;
+}
+
+p.noPermission {
+  color: coral;
 }
 
 p.errormsg {
@@ -136,5 +174,5 @@ td.descRow {
   height: 5%;
   font-size: 24pt;
   color: coral;
-  margin-bottom: 40px;
+  margin: 40px auto 40px auto;
 }

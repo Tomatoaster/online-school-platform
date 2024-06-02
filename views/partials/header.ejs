@@ -1,0 +1,34 @@
+<header>
+    <a class="titleAnchor" href="index.html">Online Napló</a>
+
+
+    <% if (username) { %>
+        <a href="/logout">
+            <div class="profile profileButton">
+                Kijelentkezés
+            </div>
+        </a>
+        <% } else { %>
+            <a href="/loginForm.html">
+                <div class="profile profileButton">
+                    Bejelentkezés
+                </div>
+            </a>
+            <% } %>
+
+                <div class="profile">
+                    <img src="img/user.png" alt="user">
+                    <% if (username) { %>
+                        <%= username %>
+                            <% } else { %>
+                                Guest
+                                <% } %>
+                </div>
+                <nav>
+                    <% if (role && (role==='admin' || role==='teacher' ) ) { %>
+                        <a href="addSubject.html">
+                            <p>Tantárgy hozzáadása</p>
+                        </a>
+                        <% } %>
+                </nav>
+</header>

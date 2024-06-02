@@ -41,5 +41,8 @@ window.onload = () => {
   }
 
   // Ha a header-ben levo ID oszlopra kattintunk, toroljuk a megjelenitett leirasokat
-  document.getElementById('headerID').addEventListener('click', clearDescriptions);
+  const header = document.getElementById('headerID');
+  if (header) {
+    header.addEventListener('click', clearDescriptions);
+  }
 };

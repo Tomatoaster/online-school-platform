@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+
+<%- include('partials/head.ejs', { title: 'Bejelentkezés' , scripts: [] }) %>
+
+    <body>
+
+        <%- include('partials/header.ejs', {username, role}) %>
+
+            <form class="form" action="/login" method="POST">
+                <p class="title">Bejelentkezés</p>
+
+                <div class="input-container ic1">
+                    <input type="text" class="input" name="username" id="formUsername" placeholder=" " required>
+                    <div class="cut"></div>
+                    <label for="formUsername" class="placeholder">Felhasználónév</label>
+                </div>
+
+                <div class="input-container ic2">
+                    <input type="password" class="input" name="password" id="formPassword" placeholder=" " required>
+                    <div class="cut"></div>
+                    <label for="formPassword" class="placeholder">Jelszó</label>
+                </div>
+
+                <button name="loginButton" class="submit" type="submit">Bejelentkezés!</button>
+            </form>
+
+            <p class="ansMsg">
+                <%= answer %>
+            </p>
+    </body>
+
+</html>

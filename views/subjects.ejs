@@ -4,73 +4,75 @@
 <%- include('partials/head.ejs', { title: 'Online Napló' , scripts: [ 'showSubjects.js' ] }) %>
 
     <body>
-        <header>
-            <a href="index.html">Online Napló</a>
-            <nav>
-                <a href="addSubject.html">
-                    <p>Tantárgy hozzáadása</p>
-                </a>
-            </nav>
-        </header>
+        <%- include('partials/header.ejs', {username, role}) %>
 
-        <% if (subjects.length) { %>
-            <h1>Tantárgyak</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th id="headerID">Tantárgy ID</th>
-                        <th>Tantárgy Név</th>
-                        <!-- <th>Leírás</th> -->
-                        <th>Felelős</th>
-                        <th>Feladatok</th>
-                        <th>Törlés</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% subjects.forEach((subject)=> { %>
-
+            <% if (subjects.length) { %>
+                <h1>Tantárgyak</h1>
+                <table>
+                    <thead>
                         <tr>
-                            <td class="idColumn">
-                                <%= subject.SubjID %>
-                            </td>
-                            <td>
-                                <%= subject.SubjName %>
-                            </td>
-                            <!-- <td>
+                            <th id="headerID">Tantárgy ID</th>
+                            <th>Tantárgy Név</th>
+                            <!-- <th>Leírás</th> -->
+                            <th>Felelős</th>
+                            <th>Feladatok</th>
+                            <% if (role && (role==='teacher' || role==='admin' )) { %>
+                                <th>Törlés</th>
+                                <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% subjects.forEach((subject)=> { %>
+
+                            <tr>
+                                <td class="idColumn">
+                                    <%= subject.SubjID %>
+                                </td>
+                                <td>
+                                    <%= subject.SubjName %>
+                                </td>
+                                <!-- <td>
                                 <%= subject.SubjDesc %>
                             </td> -->
-                            <td>
-                                <%= subject.UserID %>
-                            </td>
-                            <td>
-                                <form action="/showAssignments" method="GET">
-                                    <button name="id" value="<%= subject.SubjID %>" type="submit">
-                                        <a>Megtekint</a>
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="/deleteSubject?id=<%= subject.SubjID %>" method="POST">
-                                    <button name="delButton" type="submit">
-                                        <a>Töröl!</a>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                                <td>
+                                    <%= subject.UserID %>
+                                </td>
+                                <td>
+                                    <form action="/showAssignments" method="GET">
+                                        <button name="id" value="<%= subject.SubjID %>" type="submit">
+                                            <p>Megtekint</p>
+                                        </button>
+                                    </form>
+                                </td>
+                                <% if (role && (role==='teacher' || role==='admin' )) { %>
+                                    <td>
+                                        <% if (username===subject.UserID) { %>
+                                            <form action="/deleteSubject?id=<%= subject.SubjID %>" method="POST">
+                                                <button name="delButton" type="submit">
+                                                    <p>Töröl!</p>
+                                                </button>
+                                            </form>
+                                            <% } else { %>
+                                                <p class="noPermission"> Nem jogosult! </p>
+                                                <% } %>
 
-                        <% }) %>
+                                    </td>
+                                    <% } %>
+                            </tr>
 
-                </tbody>
-            </table>
-            <% } else { %>
-                <h1>Nincs megjelenítendő tantárgy!</h1>
-                <% } %>
-                    <!-- Ha hiba van, ugyanide üzenettel -->
-                    <% if (errorMsg) {%>
-                        <p class="errormsg">
-                            <%= errorMsg %>
-                        </p>
-                        <% } %>
+                            <% }) %>
+
+                    </tbody>
+                </table>
+                <% } else { %>
+                    <h1>Nincs megjelenítendő tantárgy!</h1>
+                    <% } %>
+                        <!-- Ha hiba van, ugyanide üzenettel -->
+                        <% if (errorMsg) {%>
+                            <p class="errormsg">
+                                <%= errorMsg %>
+                            </p>
+                            <% } %>
 
     </body>
 
