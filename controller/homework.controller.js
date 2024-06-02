@@ -53,7 +53,7 @@ export default async function homeworkAdder(req, res) {
     console.log(owner);
     console.log(req.session.username);
     if (owner[0].UserID !== req.session.username) {
-      res.status(400).render('error', {
+      res.status(403).render('error', {
         message: 'You do not have permission to perform this operation!',
         username: req.session.username,
         role: req.session.role,
@@ -75,7 +75,7 @@ export default async function homeworkAdder(req, res) {
       };
       await db.insertAssignment(assignment);
     } catch (err) {
-      res.render('error', {
+      res.status(400).render('error', {
         message: `Insertion unsuccessful: ${err.message}`,
         username: req.session.username,
         role: req.session.role,

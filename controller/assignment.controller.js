@@ -5,7 +5,9 @@ import db from '../db/subjects.db.js';
 export async function displayAssignments(req, res) {
   // Nem kell manuálisan lekérni az ID-t, benne van a requestben
   if (!req.query.id) {
-    res.render('error', { message: 'Subject not found!', username: req.session.username, role: req.session.role });
+    res
+      .status(400)
+      .render('error', { message: 'Subject not found!', username: req.session.username, role: req.session.role });
     return;
   }
 
@@ -13,7 +15,7 @@ export async function displayAssignments(req, res) {
     const [assignments] = await db.getSubjectAssignments(req.query.id);
     const [owner] = await db.getSubjectOwner(req.query.id);
 
-    res.render('assignments', {
+    res.status(200).render('assignments', {
       assignments,
       activeID: req.query.id,
       errorMsg: '',
@@ -22,13 +24,13 @@ export async function displayAssignments(req, res) {
       owner: owner[0].UserID,
     });
   } catch (err) {
-    res.render('error', { message: err.message, username: req.session.username, role: req.session.role });
+    res.status(400).render('error', { message: err.message, username: req.session.username, role: req.session.role });
   }
 }
 
 export async function removeAssignment(req, res) {
   if (!req.query.id) {
-    res.status(200).json("Couldn't delete assignment!");
+    res.status(400).json("Couldn't delete assignment!");
     return;
   }
 

@@ -44,7 +44,7 @@ router.get(['/', '/index', '/index.html'], async (req, res) => {
 router.get(['/addSubject', '/addSubject.html'], authorize(['teacher', 'admin']), async (req, res) => {
   try {
     const [users] = await db.getAllUsers();
-    res.render('addSubject', { users, username: req.session.username, role: req.session.role });
+    res.status(200).render('addSubject', { users, username: req.session.username, role: req.session.role });
   } catch (err) {
     res.status(500).render('error', {
       message: `Selection unsuccessful: ${err.message}`,
@@ -65,7 +65,7 @@ router.get('/showDescription', async (req, res) => {
 });
 
 router.get(['/loginForm', '/loginForm.html'], (req, res) => {
-  res.render('loginForm', { answer: '', username: req.session.username, role: req.session.role });
+  res.status(200).render('loginForm', { answer: '', username: req.session.username, role: req.session.role });
 });
 
 router.get('/showAssignments', displayAssignments);

@@ -41,7 +41,7 @@ export async function checkPassword(req, res) {
 export function logout(req, res) {
   req.session.destroy(async (err) => {
     if (err) {
-      res.status(400).render('error', { message: err.message, username: req.session.username, role: req.session.role });
+      res.status(500).render('error', { message: err.message, username: req.session.username, role: req.session.role });
     }
 
     const [subjects] = await db.getAllSubjects();
