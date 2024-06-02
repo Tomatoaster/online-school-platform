@@ -3,8 +3,7 @@ import express from 'express';
 import multer from 'multer';
 import db from '../db/subjects.db.js';
 import { subjectAdder, subjectRemover } from '../controller/subject.controller.js';
-import { displayAssignments, removeAssignment } from '../controller/assignment.controller.js';
-import homeworkAdder from '../controller/homework.controller.js';
+import { displayAssignments, removeAssignment, addAssignment } from '../controller/assignment.controller.js';
 import handleNotFound from '../middleware/error.middleware.js';
 import { checkPassword, logout } from '../controller/login.controller.js';
 import { authorize } from '../middleware/authorize.middleware.js';
@@ -72,7 +71,7 @@ router.get('/showAssignments', displayAssignments);
 
 router.post('/addSubject', authorize(['teacher', 'admin']), subjectAdder);
 router.post('/deleteSubject', authorize(['teacher', 'admin']), subjectRemover);
-router.post('/addHomework', authorize(['teacher', 'admin']), upload.single('hwFile'), homeworkAdder);
+router.post('/addHomework', authorize(['teacher', 'admin']), upload.single('hwFile'), addAssignment);
 router.post('/removeAssignment', authorize(['teacher', 'admin']), removeAssignment);
 
 router.post('/login', checkPassword);
