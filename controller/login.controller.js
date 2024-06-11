@@ -23,10 +23,11 @@ export async function checkPassword(req, res) {
       req.session.username = userDetails[0].UserName;
       req.session.role = userDetails[0].Role;
 
-      const [subjects] = await db.getAllSubjects();
-      res
-        .status(200)
-        .render('subjects', { subjects, errorMsg: '', username: req.session.username, role: req.session.role });
+      // const [subjects] = await db.getAllSubjects();
+      // res
+      //   .status(200)
+      //   .render('subjects', { subjects, errorMsg: '', username: req.session.username, role: req.session.role });
+      res.status(200).redirect('/');
       return;
     }
   }
@@ -39,12 +40,13 @@ export async function checkPassword(req, res) {
 }
 
 export function logout(req, res) {
-  req.session.destroy(async (err) => {
+  req.session.destroy((err) => {
     if (err) {
       res.status(500).render('error', { message: err.message, username: req.session.username, role: req.session.role });
     }
 
-    const [subjects] = await db.getAllSubjects();
-    res.status(200).render('subjects', { subjects, errorMsg: '', username: undefined, role: undefined });
+    // const [subjects] = await db.getAllSubjects();
+    // res.status(200).render('subjects', { subjects, errorMsg: '', username: undefined, role: undefined });
+    res.status(200).redirect('/');
   });
 }

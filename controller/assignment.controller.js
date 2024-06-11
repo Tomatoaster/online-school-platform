@@ -148,15 +148,16 @@ export async function addAssignment(req, res) {
       });
       return;
     }
-    const [newAssignments] = await db.getSubjectAssignments(req.body.hwSubject);
-    res.status(200).render('assignments', {
-      assignments: newAssignments,
-      activeID: req.body.hwSubject,
-      errorMsg: '',
-      username: req.session.username,
-      role: req.session.role,
-      owner: owner[0].UserID,
-    });
+    // const [newAssignments] = await db.getSubjectAssignments(req.body.hwSubject);
+    // res.status(200).render('assignments', {
+    //   assignments: newAssignments,
+    //   activeID: req.body.hwSubject,
+    //   errorMsg: '',
+    //   username: req.session.username,
+    //   role: req.session.role,
+    //   owner: owner[0].UserID,
+    // });
+    res.status(200).redirect(`/showAssignments?id=${req.body.hwSubject}`);
     return;
   }
 
