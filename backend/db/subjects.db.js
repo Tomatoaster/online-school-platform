@@ -174,10 +174,10 @@ export class SubjectHandler {
 }
 
 const db = new SubjectHandler();
-try {
-  await db.setupTables();
-} catch (err) {
-  console.error(`Table Setup Error: ${err.message}`);
-  process.exit(1);
-}
+// try {
+//   await db.setupTables();
+// } catch (err) {
+//   console.error(`Table Setup Error: ${err.message}`);
+//   process.exit(1);
+// }
 export default db;

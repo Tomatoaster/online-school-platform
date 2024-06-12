@@ -21,37 +21,6 @@ const upload = multer({ storage: diskStorage });
 
 router.use(express.urlencoded({ extended: true }));
 
-router.get(['/', '/index', '/index.html'], async (req, res) => {
-  try {
-    const [subjects] = await db.getAllSubjects();
-    res.status(200).render('subjects', { subjects, errorMsg: '', username: req.user.username, role: req.user.role });
-  } catch (err) {
-    res.status(400).render('error', {
-      message: `Selection unsuccessful: ${err.message}`,
-      username: req.user.username,
-      role: req.user.role,
-    });
-  }
-});
-
-router.get(
-  ['/addSubject', '/addSubject.html'],
-  authenticateToken,
-  authorize(['teacher', 'admin']),
-  async (req, res) => {
-    try {
-      const [users] = await db.getAllUsers();
-      res.status(200).render('addSubject', { users, username: req.user.username, role: req.user.role });
-    } catch (err) {
-      res.status(500).render('error', {
-        message: `Selection unsuccessful: ${err.message}`,
-        username: req.user.username,
-        role: req.user.role,
-      });
-    }
-  },
-);
-
 router.get('/showDescription', async (req, res) => {
   try {
     const [desc] = await db.getSubjectDescription(req.query.id);

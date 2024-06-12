@@ -3,16 +3,10 @@ import path from 'path';
 import db from '../db/subjects.db.js';
 
 export async function subjectRemover(req, res) {
-  // csak saját tantárgyat tudjon törölni
-
   if (req.query.id) {
     const [owner] = await db.getSubjectOwner(req.query.id);
-    if (!owner[0] || owner[0].UserID !== req.user.username) {
-      res.status(403).render('error', {
-        message: 'You do not have permission to delete this subject!',
-        username: req.user.username,
-        role: req.user.role,
-      });
+    if (req.user.role !== 'admin' && (!owner[0] || owner[0].UserID !== req.user.username)) {
+      res.status(403).json('You do not have permission to delete this subject!');
       return;
     }
 
@@ -27,24 +21,13 @@ export async function subjectRemover(req, res) {
       });
 
       await db.deleteSubject(req.query.id);
-      const [subjects] = await db.getAllSubjects();
-      res.status(200).render('subjects', { subjects, errorMsg: '', username: req.user.username, role: req.user.role });
+      res.status(200).json({ SubjID: req.query.id });
     } catch (err) {
-      res.status(400).render('error', {
-        message: `Delete unsuccessful: ${err.message}`,
-        username: req.user.username,
-        role: req.user.role,
-      });
+      res.status(400).json(`Delete unsuccessful: ${err.message}`);
     }
     return;
   }
-  const [subjects] = await db.getAllSubjects();
-  res.status(400).render('subjects', {
-    subjects,
-    errorMsg: 'Subject not found!',
-    username: req.user.username,
-    role: req.user.role,
-  });
+  res.status(400).json('Subject not found!');
 }
 
 export async function subjectAdder(req, res) {
@@ -60,22 +43,14 @@ export async function subjectAdder(req, res) {
       await db.insertSubject(subject);
     } catch (err) {
       console.log(`${err.message}`);
-      res.status(400).render('error', {
-        message: `Insertion unsuccessful: ${err.message}`,
-        username: req.user.username,
-        role: req.user.role,
-      });
+      res.status(400).json(`Insertion unsuccessful: ${err.message}`);
       return;
     }
 
-    const [subjects] = await db.getAllSubjects();
-    res.status(200).render('subjects', { subjects, errorMsg: '', username: req.user.username, role: req.user.role });
+    res.status(200).json('Inserted successfully!');
     return;
   }
-  const [subjects] = await db.getAllSubjects();
-  res
-    .status(400)
-    .render('subjects', { subjects, errorMsg: 'Bad request!', username: req.user.username, role: req.user.role });
+  res.status(400).json('Bad request!');
 }
 
 export async function getAllSubjects(req, res) {

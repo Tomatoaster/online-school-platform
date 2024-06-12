@@ -23,7 +23,23 @@ const AuthProvider = ({ children }) => {
 
   const isAuthenticated = () => !!authState.user;
 
-  return <AuthContext.Provider value={{ authState, login, logout, isAuthenticated }}>{children}</AuthContext.Provider>;
+  const isAdmin = () => {
+    return authState.user && authState.user.role === 'admin';
+  };
+
+  const isTeacher = () => {
+    return authState.user && authState.user.role === 'teacher';
+  };
+
+  const isOwner = (owner, viewer) => {
+    return owner === viewer;
+  };
+
+  return (
+    <AuthContext.Provider value={{ authState, login, logout, isAuthenticated, isAdmin, isTeacher, isOwner }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 AuthProvider.propTypes = {

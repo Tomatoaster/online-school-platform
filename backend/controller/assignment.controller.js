@@ -3,28 +3,17 @@ import path from 'path';
 import db from '../db/subjects.db.js';
 
 export async function displayAssignments(req, res) {
-  // Nem kell manuálisan lekérni az ID-t, benne van a requestben
   if (!req.query.id) {
-    res
-      .status(400)
-      .render('error', { message: 'Subject not found!', username: req.user.username, role: req.user.role });
+    res.status(400).json('Subject not found!');
     return;
   }
 
   try {
     const [assignments] = await db.getSubjectAssignments(req.query.id);
     const [owner] = await db.getSubjectOwner(req.query.id);
-
-    res.status(200).render('assignments', {
-      assignments,
-      activeID: req.query.id,
-      errorMsg: '',
-      username: req.user.username,
-      role: req.user.role,
-      owner: owner[0].UserID,
-    });
+    res.status(200).json({ assignments, owner: owner[0].UserID });
   } catch (err) {
-    res.status(400).render('error', { message: err.message, username: req.user.username, role: req.user.role });
+    res.status(400).json(err.message);
   }
 }
 

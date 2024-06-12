@@ -14,8 +14,6 @@ export function hashPassword(password) {
 export async function checkPassword(req, res) {
   const { password, username } = req.body;
 
-  console.log(req.body);
-
   if (!password || !username) {
     res.json('Invalid Username/Password!');
     return;

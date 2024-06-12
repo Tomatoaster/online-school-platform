@@ -23,7 +23,7 @@ function Header() {
       </div>
       <nav>
         {authState.user && ['teacher', 'admin'].includes(authState.user.role) && (
-          <Link to="addSubject.html">
+          <Link to="addSubject">
             <p>Tantárgy hozzáadása</p>
           </Link>
         )}

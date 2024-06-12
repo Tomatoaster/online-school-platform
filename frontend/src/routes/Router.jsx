@@ -3,6 +3,8 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 import SubjectTable from '../components/SubjectTable';
 import Layout from '../components/Layout';
 import Login from '../components/Login';
+import AddSubject from '../components/AddSubject';
+import AssignmentTable from '../components/AssignmentTable';
 
 function Router() {
   const router = createBrowserRouter([
@@ -19,6 +21,8 @@ function Router() {
           element: <SubjectTable />,
         },
         { path: 'login', element: <Login /> },
+        { path: 'addSubject', element: <AddSubject /> },
+        { path: 'showAssignments/:id', element: <AssignmentTable /> },
       ],
     },
   ]);
