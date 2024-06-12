@@ -1,23 +1,29 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
-const useAuthPersistence = (authState) => {
-  useEffect(() => {
-    localStorage.setItem('authState', JSON.stringify(authState));
-  }, [authState]);
-};
-
 const AuthProvider = ({ children }) => {
-  const [authState, setAuthState] = useState(() => {
-    const savedAuthState = localStorage.getItem('authState');
-    return savedAuthState ? JSON.parse(savedAuthState) : { username: '', role: '' };
+  const [authState, setAuthState] = useState({
+    token: localStorage.getItem('token') || null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
   });
 
-  useAuthPersistence(authState);
+  const login = (token, user) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    setAuthState({ token, user });
+  };
 
-  return <AuthContext.Provider value={{ authState, setAuthState }}>{children}</AuthContext.Provider>;
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setAuthState({ token: null, user: null });
+  };
+
+  const isAuthenticated = () => !!authState.user;
+
+  return <AuthContext.Provider value={{ authState, login, logout, isAuthenticated }}>{children}</AuthContext.Provider>;
 };
 
 AuthProvider.propTypes = {

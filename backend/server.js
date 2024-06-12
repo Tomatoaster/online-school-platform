@@ -1,7 +1,6 @@
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
-import session from 'express-session';
 import morgan from 'morgan';
 import subjectRoutes from './routes/subjects.routes.js';
 
@@ -12,14 +11,6 @@ const app = express();
 app.use(express.static(staticDir));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(
-  session({
-    secret: 'EuDsj21pjo',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { httpOnly: true },
-  }),
-);
 
 const corsOptions = {
   origin: '*',

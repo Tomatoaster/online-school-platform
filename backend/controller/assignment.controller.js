@@ -7,7 +7,7 @@ export async function displayAssignments(req, res) {
   if (!req.query.id) {
     res
       .status(400)
-      .render('error', { message: 'Subject not found!', username: req.session.username, role: req.session.role });
+      .render('error', { message: 'Subject not found!', username: req.user.username, role: req.user.role });
     return;
   }
 
@@ -19,12 +19,12 @@ export async function displayAssignments(req, res) {
       assignments,
       activeID: req.query.id,
       errorMsg: '',
-      username: req.session.username,
-      role: req.session.role,
+      username: req.user.username,
+      role: req.user.role,
       owner: owner[0].UserID,
     });
   } catch (err) {
-    res.status(400).render('error', { message: err.message, username: req.session.username, role: req.session.role });
+    res.status(400).render('error', { message: err.message, username: req.user.username, role: req.user.role });
   }
 }
 
@@ -42,7 +42,7 @@ export async function removeAssignment(req, res) {
 
   // Csak saját tantárgyból tudjon házit törölni
   const [owner] = await db.getSubjectOwner(subjID[0].SubjID);
-  if (!owner[0] || owner[0].UserID !== req.session.username) {
+  if (!owner[0] || owner[0].UserID !== req.user.username) {
     res.status(403).json('You do not have permission to delete this assignment!');
     return;
   }
@@ -68,7 +68,7 @@ export async function addAssignment(req, res) {
   if (!req.file) {
     res
       .status(400)
-      .render('error', { message: 'Invalid file upload!', username: req.session.username, role: req.session.role });
+      .render('error', { message: 'Invalid file upload!', username: req.user.username, role: req.user.role });
     return;
   }
 
@@ -81,8 +81,8 @@ export async function addAssignment(req, res) {
       assignments,
       activeID: req.body.hwSubject,
       errorMsg: 'Wrong file type uploaded!',
-      username: req.session.username,
-      role: req.session.role,
+      username: req.user.username,
+      role: req.user.role,
       owner: owner[0].UserID,
     });
     fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (err) => {
@@ -101,8 +101,8 @@ export async function addAssignment(req, res) {
     if (!owner[0]) {
       res.status(400).render('error', {
         message: 'Invalid assignment details!',
-        username: req.session.username,
-        role: req.session.role,
+        username: req.user.username,
+        role: req.user.role,
       });
       fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (rmerr) => {
         if (rmerr) {
@@ -113,11 +113,11 @@ export async function addAssignment(req, res) {
     }
 
     // Csak saját tantárgyhoz tudjon beszúrni
-    if (owner[0].UserID !== req.session.username) {
+    if (owner[0].UserID !== req.user.username) {
       res.status(403).render('error', {
         message: 'You do not have permission to perform this operation!',
-        username: req.session.username,
-        role: req.session.role,
+        username: req.user.username,
+        role: req.user.role,
       });
       fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (rmerr) => {
         if (rmerr) {
@@ -138,8 +138,8 @@ export async function addAssignment(req, res) {
     } catch (err) {
       res.status(400).render('error', {
         message: `Insertion unsuccessful: ${err.message}`,
-        username: req.session.username,
-        role: req.session.role,
+        username: req.user.username,
+        role: req.user.role,
       });
       fs.rm(path.join(process.cwd(), 'data', 'docs', assignment.fileName), (rmerr) => {
         if (rmerr) {
@@ -148,18 +148,10 @@ export async function addAssignment(req, res) {
       });
       return;
     }
-    // const [newAssignments] = await db.getSubjectAssignments(req.body.hwSubject);
-    // res.status(200).render('assignments', {
-    //   assignments: newAssignments,
-    //   activeID: req.body.hwSubject,
-    //   errorMsg: '',
-    //   username: req.session.username,
-    //   role: req.session.role,
-    //   owner: owner[0].UserID,
-    // });
+
     res.status(200).redirect(`/showAssignments?id=${req.body.hwSubject}`);
     return;
   }
 
-  res.status(400).render('error', { message: 'Bad request!', username: req.session.username, role: req.session.role });
+  res.status(400).render('error', { message: 'Bad request!', username: req.user.username, role: req.user.role });
 }

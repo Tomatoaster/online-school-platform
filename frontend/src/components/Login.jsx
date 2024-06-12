@@ -1,31 +1,36 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import api from './main.jsx';
-import useAuth from './hooks/useAuth.js';
+import api from '../services/api.js';
+import useAuth from '../hooks/useAuth.js';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const { authState, setAuthState } = useAuth();
+  const { authState, login, logout } = useAuth();
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    if (authState.username) {
-      api.post('logout');
-    } else {
-      api
-        .post('login', data)
-        .then((response) => {
-          setAuthState({ username: response.data.username, role: response.data.role });
-          console.log(authState.username);
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            console.error('Incorrect Username/Password!');
-            // setErrorMessage();
-          } else {
-            console.error(`Something went wrong: ${error.message}`);
-          }
-        });
-    }
+    api
+      .post('login', data)
+      .then((response) => {
+        login(response.data.token, response.data.user);
+        navigate('/');
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          console.error('Incorrect Username/Password!');
+          // setErrorMessage();
+        } else {
+          console.error(`Something went wrong: ${error.message}`);
+        }
+      });
   };
+
+  useEffect(() => {
+    if (authState.user) {
+      logout();
+    }
+  }, [authState.user, logout]);
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>

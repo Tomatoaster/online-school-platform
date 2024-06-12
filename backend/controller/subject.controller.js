@@ -7,11 +7,11 @@ export async function subjectRemover(req, res) {
 
   if (req.query.id) {
     const [owner] = await db.getSubjectOwner(req.query.id);
-    if (!owner[0] || owner[0].UserID !== req.session.username) {
+    if (!owner[0] || owner[0].UserID !== req.user.username) {
       res.status(403).render('error', {
         message: 'You do not have permission to delete this subject!',
-        username: req.session.username,
-        role: req.session.role,
+        username: req.user.username,
+        role: req.user.role,
       });
       return;
     }
@@ -28,14 +28,12 @@ export async function subjectRemover(req, res) {
 
       await db.deleteSubject(req.query.id);
       const [subjects] = await db.getAllSubjects();
-      res
-        .status(200)
-        .render('subjects', { subjects, errorMsg: '', username: req.session.username, role: req.session.role });
+      res.status(200).render('subjects', { subjects, errorMsg: '', username: req.user.username, role: req.user.role });
     } catch (err) {
       res.status(400).render('error', {
         message: `Delete unsuccessful: ${err.message}`,
-        username: req.session.username,
-        role: req.session.role,
+        username: req.user.username,
+        role: req.user.role,
       });
     }
     return;
@@ -44,8 +42,8 @@ export async function subjectRemover(req, res) {
   res.status(400).render('subjects', {
     subjects,
     errorMsg: 'Subject not found!',
-    username: req.session.username,
-    role: req.session.role,
+    username: req.user.username,
+    role: req.user.role,
   });
 }
 
@@ -56,7 +54,7 @@ export async function subjectAdder(req, res) {
         subjID: req.body.subjectId,
         subjName: req.body.subjName,
         subjDesc: req.body.subjDesc,
-        userID: req.session.username,
+        userID: req.user.username,
       };
 
       await db.insertSubject(subject);
@@ -64,22 +62,20 @@ export async function subjectAdder(req, res) {
       console.log(`${err.message}`);
       res.status(400).render('error', {
         message: `Insertion unsuccessful: ${err.message}`,
-        username: req.session.username,
-        role: req.session.role,
+        username: req.user.username,
+        role: req.user.role,
       });
       return;
     }
 
     const [subjects] = await db.getAllSubjects();
-    res
-      .status(200)
-      .render('subjects', { subjects, errorMsg: '', username: req.session.username, role: req.session.role });
+    res.status(200).render('subjects', { subjects, errorMsg: '', username: req.user.username, role: req.user.role });
     return;
   }
   const [subjects] = await db.getAllSubjects();
   res
     .status(400)
-    .render('subjects', { subjects, errorMsg: 'Bad request!', username: req.session.username, role: req.session.role });
+    .render('subjects', { subjects, errorMsg: 'Bad request!', username: req.user.username, role: req.user.role });
 }
 
 export async function getAllSubjects(req, res) {

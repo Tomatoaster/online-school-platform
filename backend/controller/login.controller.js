@@ -1,5 +1,7 @@
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import db from '../db/subjects.db.js';
+import { secret } from '../config/config.js';
 
 export function hashPassword(password) {
   const salt = crypto.randomBytes(16);
@@ -27,33 +29,13 @@ export async function checkPassword(req, res) {
 
     const actualHash = crypto.createHash('sha512').update(password).update(salt).digest();
     if (expectedHash.equals(actualHash)) {
-      req.session.username = userDetails[0].UserName;
-      req.session.role = userDetails[0].Role;
-
-      // const [subjects] = await db.getAllSubjects();
-      // res
-      //   .status(200)
-      //   .render('subjects', { subjects, errorMsg: '', username: req.session.username, role: req.session.role });
-      res.status(200).json(req.session);
+      const token = jwt.sign({ username: userDetails[0].UserName, role: userDetails[0].Role }, secret, {
+        expiresIn: '24h',
+      });
+      res.status(200).json({ token, user: { username: userDetails[0].UserName, role: userDetails[0].Role } });
       return;
     }
   }
 
   res.status(401).json('Incorrect Username/Password!');
-}
-
-export function logout(req, res) {
-  req.session.destroy((err) => {
-    if (err) {
-      res.status(500).render('error', { message: err.message, username: req.session.username, role: req.session.role });
-    }
-
-    // const [subjects] = await db.getAllSubjects();
-    // res.status(200).render('subjects', { subjects, errorMsg: '', username: undefined, role: undefined });
-    res.status(200).redirect('/');
-  });
-}
-
-export function getSession(req, res) {
-  res.status(200).json(req.session);
 }
