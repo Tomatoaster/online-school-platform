@@ -142,7 +142,7 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
-public/Lab1/
+backend/public/Lab1/
 
-data/subjects.json
-data/docs/
+backend/data/subjects.json
+backend/data/docs/

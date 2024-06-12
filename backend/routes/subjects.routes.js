@@ -2,10 +2,10 @@ import path from 'path';
 import express from 'express';
 import multer from 'multer';
 import db from '../db/subjects.db.js';
-import { subjectAdder, subjectRemover } from '../controller/subject.controller.js';
+import { getAllSubjects, subjectAdder, subjectRemover } from '../controller/subject.controller.js';
 import { displayAssignments, removeAssignment, addAssignment } from '../controller/assignment.controller.js';
 import handleNotFound from '../middleware/error.middleware.js';
-import { checkPassword, logout } from '../controller/login.controller.js';
+import { checkPassword, logout, getSession } from '../controller/login.controller.js';
 import { authorize } from '../middleware/authorize.middleware.js';
 
 const router = express.Router();
@@ -20,10 +20,10 @@ const upload = multer({ storage: diskStorage });
 
 router.use(express.urlencoded({ extended: true }));
 
-// router.use((req, res, next) => {
-//   console.log(req.session);
-//   next();
-// });
+router.use((req, res, next) => {
+  console.log(req.session);
+  next();
+});
 
 router.get(['/', '/index', '/index.html'], async (req, res) => {
   try {
@@ -73,6 +73,10 @@ router.post('/addSubject', authorize(['teacher', 'admin']), subjectAdder);
 router.post('/deleteSubject', authorize(['teacher', 'admin']), subjectRemover);
 router.post('/addHomework', authorize(['teacher', 'admin']), upload.single('hwFile'), addAssignment);
 router.post('/removeAssignment', authorize(['teacher', 'admin']), removeAssignment);
+
+router.get('/allSubjects', getAllSubjects);
+
+router.get('/getSession', getSession);
 
 router.post('/login', checkPassword);
 router.get('/logout', logout);

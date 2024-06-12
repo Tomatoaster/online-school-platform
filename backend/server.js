@@ -1,5 +1,6 @@
 import path from 'path';
 import express from 'express';
+import cors from 'cors';
 import session from 'express-session';
 import morgan from 'morgan';
 import subjectRoutes from './routes/subjects.routes.js';
@@ -10,6 +11,7 @@ const app = express();
 
 app.use(express.static(staticDir));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   session({
     secret: 'EuDsj21pjo',
@@ -18,6 +20,13 @@ app.use(
     cookie: { httpOnly: true },
   }),
 );
+
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));

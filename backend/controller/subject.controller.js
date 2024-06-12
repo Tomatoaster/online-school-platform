@@ -81,3 +81,9 @@ export async function subjectAdder(req, res) {
     .status(400)
     .render('subjects', { subjects, errorMsg: 'Bad request!', username: req.session.username, role: req.session.role });
 }
+
+export async function getAllSubjects(req, res) {
+  const [subjects] = await db.getAllSubjects();
+
+  res.status(200).json(subjects);
+}

@@ -12,6 +12,13 @@ export function hashPassword(password) {
 export async function checkPassword(req, res) {
   const { password, username } = req.body;
 
+  console.log(req.body);
+
+  if (!password || !username) {
+    res.json('Invalid Username/Password!');
+    return;
+  }
+
   const [userDetails] = await db.getUserDetails(username);
   if (userDetails[0]) {
     const [saltB64, expectedHashB64] = userDetails[0].Password.split(':');
@@ -27,16 +34,12 @@ export async function checkPassword(req, res) {
       // res
       //   .status(200)
       //   .render('subjects', { subjects, errorMsg: '', username: req.session.username, role: req.session.role });
-      res.status(200).redirect('/');
+      res.status(200).json(req.session);
       return;
     }
   }
 
-  res.status(401).render('loginForm', {
-    answer: 'Incorrect Username/Password!',
-    username: req.session.username,
-    role: req.session.role,
-  });
+  res.status(401).json('Incorrect Username/Password!');
 }
 
 export function logout(req, res) {
@@ -49,4 +52,8 @@ export function logout(req, res) {
     // res.status(200).render('subjects', { subjects, errorMsg: '', username: undefined, role: undefined });
     res.status(200).redirect('/');
   });
+}
+
+export function getSession(req, res) {
+  res.status(200).json(req.session);
 }
