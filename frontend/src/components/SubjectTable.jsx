@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useForm } from 'react-hook-form';
 import useAuth from '../hooks/useAuth';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 function SubjectTable() {
   const [subjectList, setSubjectList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [activeDesc, setActiveDesc] = useState('');
   const { authState, isAdmin, isTeacher } = useAuth();
   const { handleSubmit } = useForm();
 
@@ -14,7 +15,7 @@ function SubjectTable() {
     api
       .post(`deleteSubject?id=${deleteID}`)
       .then((response) => {
-        setSubjectList(subjectList.filter((subject) => subject.SubjID !== response.data.SubjID));
+        setSubjectList((oldList) => oldList.filter((subject) => subject.SubjID !== response.data.SubjID));
       })
       .catch((error) => {
         if (error.response) {
@@ -50,7 +51,9 @@ function SubjectTable() {
       <table>
         <thead>
           <tr>
-            <th id="headerID">Tantárgy ID</th>
+            <th id="headerID" onClick={() => setActiveDesc('')}>
+              Tantárgy ID
+            </th>
             <th>Tantárgy Név</th>
             <th>Felelős</th>
             <th>Feladatok</th>
@@ -59,30 +62,41 @@ function SubjectTable() {
         </thead>
         <tbody>
           {subjectList.map((subject) => (
-            <tr key={subject.SubjID}>
-              <td className="idColumn">{subject.SubjID}</td>
-              <td>{subject.SubjName}</td>
-
-              <td>{subject.UserID}</td>
-              <td>
-                <Link to={`/showAssignments/${subject.SubjID}`}>
-                  <button name="id" type="submit">
-                    <p>Megtekint</p>
-                  </button>
-                </Link>
-              </td>
-              {(isAdmin() || isTeacher()) && (
-                <td>
-                  {(((authState.user && authState.user.username === subject.UserID) || isAdmin()) && (
-                    <form onSubmit={handleSubmit(() => onDelete(subject.SubjID))}>
-                      <button name="delButton" type="submit">
-                        <p>Töröl!</p>
-                      </button>
-                    </form>
-                  )) || <p className="noPermission">Nem jogosult!</p>}
+            <React.Fragment key={subject.SubjID}>
+              <tr>
+                <td className="idColumn" onClick={() => setActiveDesc(subject.SubjID)}>
+                  {subject.SubjID}
                 </td>
+                <td>{subject.SubjName}</td>
+
+                <td>{subject.UserID}</td>
+                <td>
+                  <Link to={`/showAssignments/${subject.SubjID}`}>
+                    <button name="id" type="submit">
+                      <p>Megtekint</p>
+                    </button>
+                  </Link>
+                </td>
+                {(isAdmin() || isTeacher()) && (
+                  <td>
+                    {(((authState.user && authState.user.username === subject.UserID) || isAdmin()) && (
+                      <form onSubmit={handleSubmit(() => onDelete(subject.SubjID))}>
+                        <button name="delButton" type="submit">
+                          <p>Töröl!</p>
+                        </button>
+                      </form>
+                    )) || <p className="noPermission">Nem jogosult!</p>}
+                  </td>
+                )}
+              </tr>
+              {activeDesc === subject.SubjID && (
+                <tr>
+                  <td className="descRow" colSpan="5">
+                    {subject.SubjDesc}
+                  </td>
+                </tr>
               )}
-            </tr>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

@@ -103,9 +103,26 @@ nav p {
   width: 6em;
 }
 
+.invites {
+  /* display: inline-block; */
+  background-color: #202030;
+  width: 20%;
+  height: 50px;
+  margin-right: 10px;
+  border: 1px solid #dfdfff;
+
+  float: right;
+}
+
+.subjects {
+  width: 78%;
+  float: left;
+}
+
 table {
   width: 70%;
   margin: auto;
+  margin-bottom: 40px;
   border-collapse: collapse;
 }
 
@@ -138,11 +155,7 @@ td button:active {
   text-decoration: none;
 }
 
-table {
-  margin-bottom: 40px;
-}
-
-p.noPermission {
+.noPermission {
   color: coral;
 }
 
@@ -150,6 +163,18 @@ p.errormsg {
   width: 100%;
   text-align: center;
   color: red;
+}
+
+p.prompt {
+  text-align: center;
+  width: 100%;
+  color: #dfdfff;
+}
+
+p.prompt > a {
+  color: #dfdfff;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 td.descRow {

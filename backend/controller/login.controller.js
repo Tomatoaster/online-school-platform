@@ -15,7 +15,7 @@ export async function checkPassword(req, res) {
   const { password, username } = req.body;
 
   if (!password || !username) {
-    res.json('Invalid Username/Password!');
+    res.status(400).json('Invalid Username/Password!');
     return;
   }
 
@@ -36,4 +36,21 @@ export async function checkPassword(req, res) {
   }
 
   res.status(401).json('Incorrect Username/Password!');
+}
+
+export async function registerUser(req, res) {
+  const { username, password, password2 } = req.body;
+  if (!username || !password || !password2 || password !== password2) {
+    res.status(400).json('Passwords do not match!');
+    return;
+  }
+
+  const hashedPassword = hashPassword(password);
+  try {
+    await db.insertUser(username, 'student', hashedPassword);
+  } catch (err) {
+    res.status(400).json('Username already taken!');
+    return;
+  }
+  await checkPassword(req, res);
 }

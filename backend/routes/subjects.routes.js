@@ -1,11 +1,10 @@
 import path from 'path';
 import express from 'express';
 import multer from 'multer';
-import db from '../db/subjects.db.js';
 import { getAllSubjects, subjectAdder, subjectRemover } from '../controller/subject.controller.js';
-import { displayAssignments, removeAssignment, addAssignment } from '../controller/assignment.controller.js';
+import { listAssignments, removeAssignment, addAssignment } from '../controller/assignment.controller.js';
 import handleNotFound from '../middleware/error.middleware.js';
-import { checkPassword } from '../controller/login.controller.js';
+import { checkPassword, registerUser } from '../controller/login.controller.js';
 import { authorize } from '../middleware/authorize.middleware.js';
 import { authenticateToken } from '../middleware/authenticate.middleware.js';
 
@@ -21,29 +20,22 @@ const upload = multer({ storage: diskStorage });
 
 router.use(express.urlencoded({ extended: true }));
 
-router.get('/showDescription', async (req, res) => {
-  try {
-    const [desc] = await db.getSubjectDescription(req.query.id);
-    res.status(200).json(desc[0].SubjDesc);
-    // console.log(desc[0].SubjDesc);
-  } catch (err) {
-    res.status(400).json("Couldn't retrieve description!");
-  }
-});
-
-router.get(['/loginForm', '/loginForm.html'], (req, res) => {
-  res.status(200).render('loginForm', { answer: '', username: req.user.username, role: req.user.role });
-});
-
-router.get('/showAssignments', displayAssignments);
+router.get('/showAssignments', listAssignments);
 
 router.post('/addSubject', authenticateToken, authorize(['teacher', 'admin']), subjectAdder);
 router.post('/deleteSubject', authenticateToken, authorize(['teacher', 'admin']), subjectRemover);
-router.post('/addHomework', authenticateToken, authorize(['teacher', 'admin']), upload.single('hwFile'), addAssignment);
+router.post(
+  '/addAssignment',
+  authenticateToken,
+  authorize(['teacher', 'admin']),
+  upload.single('hwFile'),
+  addAssignment,
+);
 router.post('/removeAssignment', authenticateToken, authorize(['teacher', 'admin']), removeAssignment);
 
 router.get('/allSubjects', getAllSubjects);
 
 router.post('/login', checkPassword);
+router.post('/register', registerUser);
 router.use(handleNotFound);
 export default router;

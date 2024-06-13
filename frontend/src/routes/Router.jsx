@@ -3,6 +3,7 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 import SubjectTable from '../components/SubjectTable';
 import Layout from '../components/Layout';
 import Login from '../components/Login';
+import Register from '../components/Register';
 import AddSubject from '../components/AddSubject';
 import AssignmentTable from '../components/AssignmentTable';
 
@@ -18,9 +19,17 @@ function Router() {
       children: [
         {
           path: '',
-          element: <SubjectTable />,
+          element: (
+            <>
+              <div className="invites"></div>
+              <div className="subjects">
+                <SubjectTable />
+              </div>
+            </>
+          ),
         },
         { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
         { path: 'addSubject', element: <AddSubject /> },
         { path: 'showAssignments/:id', element: <AssignmentTable /> },
       ],

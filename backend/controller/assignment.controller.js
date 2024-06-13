@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import db from '../db/subjects.db.js';
 
-export async function displayAssignments(req, res) {
+export async function listAssignments(req, res) {
   if (!req.query.id) {
     res.status(400).json('Subject not found!');
     return;
@@ -55,25 +55,12 @@ export async function removeAssignment(req, res) {
 
 export async function addAssignment(req, res) {
   if (!req.file) {
-    res
-      .status(400)
-      .render('error', { message: 'Invalid file upload!', username: req.user.username, role: req.user.role });
+    res.status(400).json('Invalid file upload!');
     return;
   }
 
-  console.log(path.join(process.cwd(), 'data', 'docs', req.file.filename));
   if (req.file.mimetype !== 'application/pdf') {
-    const [assignments] = await db.getSubjectAssignments(req.body.hwSubject);
-    const [owner] = await db.getSubjectOwner(req.body.hwSubject);
-
-    res.status(400).render('assignments', {
-      assignments,
-      activeID: req.body.hwSubject,
-      errorMsg: 'Wrong file type uploaded!',
-      username: req.user.username,
-      role: req.user.role,
-      owner: owner[0].UserID,
-    });
+    res.status(400).json('Wrong file type uploaded!');
     fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (err) => {
       if (err) {
         console.log(`Could not delete file: ${err}`);
@@ -88,11 +75,7 @@ export async function addAssignment(req, res) {
     const [owner] = await db.getSubjectOwner(req.body.hwSubject);
 
     if (!owner[0]) {
-      res.status(400).render('error', {
-        message: 'Invalid assignment details!',
-        username: req.user.username,
-        role: req.user.role,
-      });
+      res.status(400).json('Invalid assignment details!');
       fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (rmerr) => {
         if (rmerr) {
           console.log(`Could not delete file: ${rmerr}`);
@@ -103,11 +86,7 @@ export async function addAssignment(req, res) {
 
     // Csak saját tantárgyhoz tudjon beszúrni
     if (owner[0].UserID !== req.user.username) {
-      res.status(403).render('error', {
-        message: 'You do not have permission to perform this operation!',
-        username: req.user.username,
-        role: req.user.role,
-      });
+      res.status(403).json('You do not have permission to perform this operation!');
       fs.rm(path.join(process.cwd(), 'data', 'docs', req.file.filename), (rmerr) => {
         if (rmerr) {
           console.log(`Could not delete file: ${rmerr}`);
@@ -118,29 +97,25 @@ export async function addAssignment(req, res) {
 
     try {
       assignment = {
-        subjID: req.body.hwSubject,
-        hwDesc: req.body.hwDesc,
-        dueDate: req.body.dueDate,
-        fileName: req.file.filename,
+        SubjID: req.body.hwSubject,
+        ADesc: req.body.hwDesc,
+        DueDate: req.body.dueDate,
+        FileName: req.file.filename,
       };
-      await db.insertAssignment(assignment);
+      const inserted = await db.insertAssignment(assignment);
+      assignment.AID = inserted[0].insertId;
+      res.status(200).json(assignment);
+      return;
     } catch (err) {
-      res.status(400).render('error', {
-        message: `Insertion unsuccessful: ${err.message}`,
-        username: req.user.username,
-        role: req.user.role,
-      });
-      fs.rm(path.join(process.cwd(), 'data', 'docs', assignment.fileName), (rmerr) => {
+      res.status(400).json(`Insertion unsuccessful: ${err.message}`);
+      fs.rm(path.join(process.cwd(), 'data', 'docs', assignment.FileName), (rmerr) => {
         if (rmerr) {
           console.log(`Could not delete file: ${rmerr}`);
         }
       });
       return;
     }
-
-    res.status(200).redirect(`/showAssignments?id=${req.body.hwSubject}`);
-    return;
   }
 
-  res.status(400).render('error', { message: 'Bad request!', username: req.user.username, role: req.user.role });
+  res.status(400).json('Bad request!');
 }

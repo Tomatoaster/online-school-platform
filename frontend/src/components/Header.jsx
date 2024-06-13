@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const { authState } = useAuth();
-  console.log(authState);
   return (
     <header>
       <Link className="titleAnchor" to="/">

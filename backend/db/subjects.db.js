@@ -73,6 +73,12 @@ export class SubjectHandler {
     console.log('Tables created successfully!');
   }
 
+  insertUser(username, role, password) {
+    const query = `INSERT INTO Users(UserName, Role, Password)
+      VALUES (?, ?, ?)`;
+    return this.pool.query(query, [username, role, password]);
+  }
+
   getAllSubjects() {
     const query = 'SELECT * FROM Subjects';
     return this.pool.query(query);
@@ -133,7 +139,7 @@ export class SubjectHandler {
   }
 
   getSubjectAssignments(id) {
-    const query = `SELECT *
+    const query = `SELECT AID, SubjID, ADesc, DATE_FORMAT(DueDate, '%Y-%m-%d') AS DueDate, FileName
     FROM Assignments
     WHERE SubjID = ?`;
     return this.pool.query(query, id);
@@ -142,7 +148,7 @@ export class SubjectHandler {
   insertAssignment(assignment) {
     const query = `INSERT INTO Assignments(SubjID, ADesc, DueDate, FileName)
     VALUES (?, ?, ?, ?)`;
-    return this.pool.query(query, [assignment.subjID, assignment.hwDesc, assignment.dueDate, assignment.fileName]);
+    return this.pool.query(query, [assignment.SubjID, assignment.ADesc, assignment.DueDate, assignment.FileName]);
   }
 
   getSubjectDescription(subjID) {

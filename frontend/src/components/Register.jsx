@@ -1,26 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import api from '../services/api.js';
-import useAuth from '../hooks/useAuth.js';
-import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
+import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Register() {
   const { authState, login, logout } = useAuth();
   const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
-
   const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     api
-      .post('login', data)
+      .post('register', data)
       .then((response) => {
         login(response.data.token, response.data.user);
         navigate('/');
       })
       .catch((error) => {
-        if (error.response && error.response.status === 401) {
-          setErrorMsg('Incorrect Username/Password!');
+        if (error.response) {
+          setErrorMsg(error.response.data);
         } else {
           setErrorMsg(`Something went wrong: ${error.message}`);
         }
@@ -35,13 +34,8 @@ function Login() {
 
   return (
     <>
-      <p className="prompt">
-        Nincs fiókja? &nbsp;
-        <Link to="/register">Regisztráljon most!</Link>
-      </p>
-
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
-        <p className="title">Bejelentkezés</p>
+        <p className="title">Regisztráció</p>
 
         <div className="input-container ic1">
           <input
@@ -71,8 +65,22 @@ function Login() {
           </label>
         </div>
 
+        <div className="input-container ic2">
+          <input
+            type="password"
+            className="input"
+            {...register('password2', { required: true })}
+            id="formPassword2"
+            placeholder=" "
+          />
+          <div className="cut"></div>
+          <label htmlFor="formPassword2" className="placeholder">
+            Jelszó megerősítése
+          </label>
+        </div>
+
         <button name="loginButton" className="submit" type="submit">
-          Bejelentkezés!
+          Regisztráció!
         </button>
       </form>
       {errorMsg && <p className="ansMsg">{errorMsg}</p>}
@@ -80,4 +88,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
