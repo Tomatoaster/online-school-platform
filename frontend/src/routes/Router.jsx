@@ -1,14 +1,13 @@
 import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Error404 from '../components/Error404';
-import SubjectTable from '../components/SubjectTable';
 import Layout from '../components/Layout';
 import Login from '../components/Login';
 import Register from '../components/Register';
 import AddSubject from '../components/AddSubject';
 import AssignmentTable from '../components/AssignmentTable';
 import UserList from '../components/UserList';
-import InviteList from '../components/InviteList';
+import MainPage from '../components/MainPage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -22,12 +21,7 @@ function Router() {
       children: [
         {
           path: '',
-          element: (
-            <>
-              <InviteList />
-              <SubjectTable />
-            </>
-          ),
+          element: <MainPage />,
         },
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },

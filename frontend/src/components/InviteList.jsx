@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import api from '../services/api';
+import PropTypes from 'prop-types';
 
-function InviteList() {
+function InviteList({ syncSubjects }) {
   const { authState } = useAuth();
   const [invites, setInvites] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
@@ -25,6 +26,10 @@ function InviteList() {
       .post('acceptInvitation', { subjID: id })
       .then((response) => {
         setErrorMsg(response.data);
+        syncSubjects();
+        setInvites((oldList) => {
+          return oldList.filter((oneInv) => oneInv.SubjID != id);
+        });
       })
       .catch((err) => {
         if (err.response) {
@@ -40,6 +45,9 @@ function InviteList() {
       .post('rejectInvitation', { subjID: id })
       .then((response) => {
         setErrorMsg(response.data);
+        setInvites((oldList) => {
+          return oldList.filter((oneInv) => oneInv.SubjID != id);
+        });
       })
       .catch((err) => {
         if (err.response) {
@@ -49,6 +57,8 @@ function InviteList() {
         }
       });
   };
+
+  console.log(invites);
 
   if (!authState.user) {
     return <></>;
@@ -76,24 +86,12 @@ function InviteList() {
           </div>
         </div>
       ))}
-
-      {/* <div className="oneInvite">
-        <div className="inviteText">Meghívást kaptál a TANTARGY tantárgyhoz!</div>
-        <div className="answer accept">&#10003;</div>
-        <div className="answer refuse">X</div>
-      </div>
-      <div className="oneInvite">
-        <div className="inviteText">Meghívást kaptál a TANTARGY tantárgyhoz!</div>
-        <div className="answer accept">&#10003;</div>
-        <div className="answer refuse">X</div>
-      </div>
-      <div className="oneInvite">
-        <div className="inviteText">Meghívást kaptál a TANTARGY tantárgyhoz!</div>
-        <div className="answer accept">&#10003;</div>
-        <div className="answer refuse">X</div>
-      </div> */}
     </div>
   );
 }
+
+InviteList.propTypes = {
+  syncSubjects: PropTypes.func.isRequired,
+};
 
 export default InviteList;

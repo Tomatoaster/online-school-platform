@@ -10,7 +10,7 @@ export async function addInvitation(req, res) {
 
   const [owner] = await db.getSubjectOwner(subjID);
   if (!owner[0] || owner[0].UserID !== req.user.username) {
-    req.status(403).json('You do no have permission to invite students to this subject!');
+    res.status(403).json('You do no have permission to invite students to this subject!');
     return;
   }
 

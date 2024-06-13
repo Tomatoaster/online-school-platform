@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import api from '../services/api';
 import { useForm } from 'react-hook-form';
 import useAuth from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function SubjectTable() {
-  const [subjectList, setSubjectList] = useState([]);
-  const [errorMsg, setErrorMsg] = useState('');
+function SubjectTable({ subjectList, setSubjectList, errorMsg, setErrorMsg }) {
   const [activeDesc, setActiveDesc] = useState('');
   const { authState, isAdmin, isTeacher } = useAuth();
   const { handleSubmit } = useForm();
@@ -25,18 +24,6 @@ function SubjectTable() {
         }
       });
   };
-
-  useEffect(() => {
-    api
-      .get('userSubjects')
-      .then((response) => {
-        console.log(response.data);
-        setSubjectList(response.data);
-      })
-      .catch((err) => {
-        setErrorMsg(err.message);
-      });
-  }, []);
 
   if (!authState.user) {
     return <h1 className="errormsg">Tantárgyak megjelenítéséhez jelentkezzen be!</h1>;
@@ -115,5 +102,12 @@ function SubjectTable() {
     </div>
   );
 }
+
+SubjectTable.propTypes = {
+  subjectList: PropTypes.array.isRequired,
+  setSubjectList: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  setErrorMsg: PropTypes.func.isRequired,
+};
 
 export default SubjectTable;
