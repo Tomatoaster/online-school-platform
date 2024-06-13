@@ -58,3 +58,8 @@ export async function getAllSubjects(req, res) {
 
   res.status(200).json(subjects);
 }
+
+export async function getUserSubjects(req, res) {
+  const [subjects] = await db.getUserSubjects(req.user.username);
+  res.status(200).json(subjects);
+}

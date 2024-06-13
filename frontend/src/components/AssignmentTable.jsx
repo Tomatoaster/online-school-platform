@@ -54,12 +54,13 @@ function AssignmentTable() {
       .then((response) => {
         setAssignmentList(response.data.assignments);
         setSubjectOwner(response.data.owner);
-        // setAssignmentList([
-        //   { AID: 5, SubjID: 'a', ADesc: 'Feladat leiras', FileName: 'assignment.pdf', DueDate: '2024-06-27' },
-        // ]);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response) {
+          setErrorMsg(error.response.data);
+        } else {
+          setErrorMsg(`Something went wrong: ${error.message}`);
+        }
       });
   }, [id]);
 

@@ -28,13 +28,13 @@ function SubjectTable() {
 
   useEffect(() => {
     api
-      .get('allSubjects')
+      .get('userSubjects')
       .then((response) => {
-        // setSubjectList([{ SubjID: 'asd', SubjName: 'Tantargy', UserID: 'Tanar1', SubjDesc: 'Leiras' }]);
+        console.log(response.data);
         setSubjectList(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        setErrorMsg(err.message);
       });
   }, []);
 
@@ -47,7 +47,7 @@ function SubjectTable() {
   }
 
   return (
-    <>
+    <div className="subjects">
       <table>
         <thead>
           <tr>
@@ -57,6 +57,7 @@ function SubjectTable() {
             <th>Tantárgy Név</th>
             <th>Felelős</th>
             <th>Feladatok</th>
+            {(isAdmin() || isTeacher()) && <th>Meghívás</th>}
             {(isAdmin() || isTeacher()) && <th>Törlés</th>}
           </tr>
         </thead>
@@ -77,6 +78,15 @@ function SubjectTable() {
                     </button>
                   </Link>
                 </td>
+                {(isAdmin() || isTeacher()) && (
+                  <td>
+                    {(authState.user && authState.user.username === subject.UserID && (
+                      <p className="prompt">
+                        <Link to={`/inviteUsers/${subject.SubjID}`}>Ugrás</Link>
+                      </p>
+                    )) || <p className="noPermission">Nem jogosult!</p>}
+                  </td>
+                )}
                 {(isAdmin() || isTeacher()) && (
                   <td>
                     {(((authState.user && authState.user.username === subject.UserID) || isAdmin()) && (
@@ -102,7 +112,7 @@ function SubjectTable() {
       </table>
 
       {errorMsg && <p className="ansMsg">{errorMsg}</p>}
-    </>
+    </div>
   );
 }
 

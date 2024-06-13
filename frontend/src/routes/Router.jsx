@@ -1,11 +1,14 @@
 import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
+import Error404 from '../components/Error404';
 import SubjectTable from '../components/SubjectTable';
 import Layout from '../components/Layout';
 import Login from '../components/Login';
 import Register from '../components/Register';
 import AddSubject from '../components/AddSubject';
 import AssignmentTable from '../components/AssignmentTable';
+import UserList from '../components/UserList';
+import InviteList from '../components/InviteList';
 
 function Router() {
   const router = createBrowserRouter([
@@ -21,10 +24,8 @@ function Router() {
           path: '',
           element: (
             <>
-              <div className="invites"></div>
-              <div className="subjects">
-                <SubjectTable />
-              </div>
+              <InviteList />
+              <SubjectTable />
             </>
           ),
         },
@@ -32,7 +33,16 @@ function Router() {
         { path: 'register', element: <Register /> },
         { path: 'addSubject', element: <AddSubject /> },
         { path: 'showAssignments/:id', element: <AssignmentTable /> },
+        { path: 'inviteUsers/:id', element: <UserList /> },
       ],
+    },
+    {
+      path: '*',
+      element: (
+        <Layout>
+          <Error404 />
+        </Layout>
+      ),
     },
   ]);
 

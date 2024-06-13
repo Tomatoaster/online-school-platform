@@ -106,12 +106,42 @@ nav p {
 .invites {
   /* display: inline-block; */
   background-color: #202030;
-  width: 20%;
-  height: 50px;
+  width: 15%;
+  min-height: 50px;
   margin-right: 10px;
   border: 1px solid #dfdfff;
 
+  padding: 5px;
+
   float: right;
+}
+
+.oneInvite {
+  border-radius: 10px;
+  border: 1px solid #dfdfff;
+  /* height: 100px; */
+  text-align: center;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.answer {
+  height: 40px;
+  /* background-color: green; */
+  width: 45%;
+  align-content: center;
+  margin-top: 12px;
+  margin-right: 2px;
+}
+
+.accept {
+  border: 2px solid green;
+  display: inline-block;
+}
+
+.refuse {
+  border: 2px solid red;
+  display: inline-block;
 }
 
 .subjects {

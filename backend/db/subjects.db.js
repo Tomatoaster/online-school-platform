@@ -22,6 +22,8 @@ export class SubjectHandler {
   }
 
   async setupTables() {
+    await this.pool.query('DROP TABLE IF EXISTS Enrollments');
+    await this.pool.query('DROP TABLE IF EXISTS Invitations');
     await this.pool.query('DROP TABLE IF EXISTS Assignments');
     await this.pool.query('DROP TABLE IF EXISTS Subjects');
     await this.pool.query('DROP TABLE IF EXISTS Users');
@@ -50,6 +52,22 @@ export class SubjectHandler {
       FileName VARCHAR(256),
       FOREIGN KEY (SubjID) REFERENCES Subjects(SubjID)
     )`);
+
+    await this.pool.query(`CREATE TABLE IF NOT EXISTS Invitations (
+        SubjID VARCHAR(64),
+        UserName VARCHAR(64),
+        FOREIGN KEY (SubjID) REFERENCES Subjects(SubjID),
+        FOREIGN KEY (UserName) REFERENCES Users(UserName),
+        PRIMARY KEY (SubjID, UserName)
+      )`);
+
+    await this.pool.query(`CREATE TABLE IF NOT EXISTS Enrollments (
+        SubjID VARCHAR(64),
+        UserName VARCHAR(64),
+        FOREIGN KEY (SubjID) REFERENCES Subjects(SubjID),
+        FOREIGN KEY (UserName) REFERENCES Users(UserName),
+        PRIMARY KEY (SubjID, UserName)
+      )`);
 
     await this.pool.query(
       `INSERT INTO Users(UserName, Role, Password)
@@ -84,9 +102,28 @@ export class SubjectHandler {
     return this.pool.query(query);
   }
 
-  insertSubject(subject) {
+  async insertSubject(subject) {
     const query = 'INSERT INTO Subjects VALUES (?, ?, ?, ?)';
-    return this.pool.query(query, [subject.subjID, subject.subjName, subject.subjDesc, subject.userID]);
+    await this.pool.query(query, [subject.subjID, subject.subjName, subject.subjDesc, subject.userID]);
+
+    const query2 = 'INSERT INTO Enrollments(SubjID, UserName) VALUES (?, ?)';
+    return this.pool.query(query2, [subject.subjID, subject.userID]);
+  }
+
+  async getUserSubjects(name) {
+    const query = `SELECT SubjID FROM Enrollments
+    WHERE UserName = ?`;
+    const [rows] = await this.pool.query(query, name);
+    const ids = rows.map((row) => row.SubjID);
+
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const placeholders = ids.map(() => '?').join(',');
+    const query2 = `SELECT * FROM Subjects
+    WHERE SubjID IN (${placeholders})`;
+    return this.pool.query(query2, ids);
   }
 
   getAllUsers() {
@@ -177,13 +214,49 @@ export class SubjectHandler {
     WHERE AID = ?`;
     return this.pool.query(query, id);
   }
+
+  getEnrollment(subjID, username) {
+    const query = `SELECT * FROM Enrollments
+    WHERE SubjID = ? AND UserName = ?`;
+    return this.pool.query(query, [subjID, username]);
+  }
+
+  getInvitation(subjID, username) {
+    const query = `SELECT * FROM Invitations
+    WHERE SubjID = ? AND UserName = ?`;
+    return this.pool.query(query, [subjID, username]);
+  }
+
+  getUserInvitations(username) {
+    const query = `SELECT * FROM Invitations
+    WHERE UserName = ?`;
+    return this.pool.query(query, username);
+  }
+
+  insertInvitation(subjID, username) {
+    const query = `INSERT INTO Invitations(SubjID, UserName)
+    VALUES (? ,?)`;
+    return this.pool.query(query, [subjID, username]);
+  }
+
+  insertEnrollment(subjID, username) {
+    const query = `INSERT INTO Enrollments(SubjID, UserName)
+    VALUES (? ,?)`;
+    return this.pool.query(query, [subjID, username]);
+  }
+
+  deleteInvitation(subjID, username) {
+    const query = `DELETE FROM Invitations
+    WHERE SubjID = ? AND UserName = ?`;
+    return this.pool.query(query, [subjID, username]);
+  }
 }
 
 const db = new SubjectHandler();
-// try {
-//   await db.setupTables();
-// } catch (err) {
-//   console.error(`Table Setup Error: ${err.message}`);
-//   process.exit(1);
-// }
+try {
+  await db.setupTables();
+} catch (err) {
+  console.error(`Table Setup Error: ${err.message}`);
+  process.exit(1);
+}
 export default db;

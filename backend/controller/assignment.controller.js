@@ -9,6 +9,11 @@ export async function listAssignments(req, res) {
   }
 
   try {
+    const [isEnrolled] = await db.getEnrollment(req.query.id, req.user.username);
+    if (!isEnrolled[0]) {
+      res.status(403).json('You are not enrolled to this subject!');
+      return;
+    }
     const [assignments] = await db.getSubjectAssignments(req.query.id);
     const [owner] = await db.getSubjectOwner(req.query.id);
     res.status(200).json({ assignments, owner: owner[0].UserID });
