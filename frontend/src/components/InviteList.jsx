@@ -58,7 +58,7 @@ function InviteList({ syncSubjects }) {
       });
   };
 
-  console.log(invites);
+  // console.log(invites);
 
   if (!authState.user) {
     return <></>;

@@ -2,7 +2,7 @@ import db from '../db/subjects.db.js';
 
 export async function addInvitation(req, res) {
   const { subjID, username } = req.body;
-  console.log(subjID, username);
+  // console.log(subjID, username);
   if (!subjID || !username) {
     res.status(400).json('Bad request!');
     return;
